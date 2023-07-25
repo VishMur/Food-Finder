@@ -9,32 +9,17 @@ st.set_page_config(
 db = firestore.Client.from_service_account_json("firestore-key.json")
 
 messages_collection = db.collection("messages")
+st.session_state.messages = []
 
 # get all messages
 for document in messages_collection.stream():
     st.write("Document: ", document.id)
     st.write("Contents: ", document.to_dict())
-
-# doc_ref = db.collection("messages").document("T6Mw2vuOJGDg4FcvK7p7")
-#
-# # Then get the data at that reference.
-# doc = doc_ref.get()
-#
-# # Let's see what we got!
-# st.write("The name is: ", doc.id)
-# st.write("The contents are: ", doc.to_dict())
-
-
-
-if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
-
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages.append({"role": "user", "fromId": document.get("from"), "toId": document.get("to"), "content": document.get("msg")})
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+        st.markdown(message["fromId"] + " ----- " + message["content"])
 
 if prompt := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
