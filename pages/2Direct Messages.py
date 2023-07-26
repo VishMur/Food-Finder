@@ -14,18 +14,29 @@ db = firestore.Client.from_service_account_json("firestore-key.json")
 #     st.write("YOOOO")
 #     switch_page("groups")
 
-messages_collection = db.collection("messages")
-st.session_state.messages = []
+container = st.container()
 
-for document in messages_collection.stream():
-    st.write("Document: ", document.id)
-    st.write("Contents: ", document.to_dict())
-    st.session_state.messages.append({"role": "user", "fromId": document.get("from"), "toId": document.get("to"), "content": document.get("msg")})
+def messages_view():
+    with container:
+        messages_collection = db.collection("messages")
+        st.session_state.messages = []
 
-for message in st.session_state.messages:
-    if message["fromId"] != this_user:
-        with st.chat_message(message["role"]):
-                st.button(message["fromId"], key=message["fromId"])
+        for document in messages_collection.stream():
+            st.write("Document: ", document.id)
+            st.write("Contents: ", document.to_dict())
+            st.session_state.messages.append({"role": "user", "fromId": document.get("from"), "toId": document.get("to"), "content": document.get("msg")})
 
-if st.session_state.get('User2'):
-    st.write("caught")
+        for message in st.session_state.messages:
+            if message["fromId"] != this_user:
+                with st.chat_message(message["role"]):
+                        st.button(message["fromId"], key=message["fromId"])
+
+        if st.session_state.get('User2'):
+            chat_view()
+
+def chat_view():
+    container.empty()
+    if st.button('Return'):
+        messages_view()
+
+messages_view()
