@@ -4,8 +4,7 @@ from streamlit_extras.add_vertical_space import add_vertical_space
 
 
 st.set_page_config(
-    page_title="Hello",
-    page_icon="👋",
+    page_title="Introduction",
 )
 
 st.title("Food Finder")
