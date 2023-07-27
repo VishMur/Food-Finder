@@ -1,0 +1,32 @@
+Metadata-Version: 2.1
+Name: streamlit-searchbar
+Version: 0.2.3
+Summary: Search bar component
+Author: Anthony Alteirac
+Author-email: anthony@alteirac.com
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: streamlit (>=1.2)
+Requires-Dist: jinja2
+
+# streamlit-searchbar
+
+Search bar component
+
+## Installation instructions 
+
+```sh
+pip install streamlit-searchbar
+```
+
+## Usage instructions
+
+```python
+import streamlit as st
+
+from streamlit_searchbar import streamlit_searchbar
+
+value = streamlit_searchbar()
+
+st.write(value)

@@ -1,0 +1,73 @@
+/* Add a black background color to the top navigation bar */
+
+body{
+    margin: 0px;
+}
+.topnav {
+    overflow: hidden;
+    background-color: #e9e9e9;
+    padding: 6px;
+  }
+  
+  .topnav .search-container {
+    float: right;
+  }
+
+  .topnav .search-container button {
+    float: right;
+    padding: 6px 10px;
+    margin-top: 1px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .topnav .search-container button:hover {
+    background: #ccc;
+  }
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Style the "active" element to highlight the current page */
+  .topnav a.active {
+    background-color: #2196F3;
+    color: white;
+  }
+  
+  /* Style the search box inside the navigation bar */
+.topnav input[type=text] {
+  padding: 6px;
+  margin-top: 1px;
+  font-size: 17px;
+  border:none
+}
+  
+  /* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
+  @media screen and (max-width: 600px) {
+    .topnav .search-container {
+        float: none;
+    }
+    .topnav a, .topnav input[type=text], .topnav .search-container button {
+        float: none;
+        text-align: left;
+        margin: 0;
+    }
+    .topnav input[type=text] {
+        width: calc(100% - 55px);
+    }
+  }

@@ -14,10 +14,15 @@ if 'num' not in st.session_state:
 if 'to_chat' not in st.session_state:
     st.session_state.to_chat = ""
 
-def update2(word):
+def route_to_chat_view(word):
     st.session_state.to_chat = word
+    st.session_state.num = "2"
+    st.button("Return", on_click=route_to_chatlist_view, key='key_2')
+    st.write(word)
+
     messages_collection = db.collection("messages")
     st.session_state.chat_messages = []
+
     for document in messages_collection.stream():
         st.session_state.chat_messages.append({"role": "user", "fromId": document.get("from"), "toId": document.get("to"),
                                           "content": document.get("msg")})
@@ -26,26 +31,21 @@ def update2(word):
             with st.chat_message(message["role"]):
                 st.write(message["fromId"], message["content"])
 
-    st.session_state.num = "2"
-    st.button("Return", on_click=update3, key='key_2')
-
-def update3():
+def route_to_chatlist_view():
     st.session_state.to_chat = ""
     st.session_state.num = "1"
 
-st.write(st.session_state.to_chat)
 if st.session_state.num == "1":
+    st.title("Chats")
+
     messages_collection = db.collection("messages")
     st.session_state.messages = []
 
     for document in messages_collection.stream():
-        st.write("Document: ", document.id)
-        st.write("Contents: ", document.to_dict())
         st.session_state.messages.append({"role": "user", "fromId": document.get("from"), "toId": document.get("to"),
                                           "content": document.get("msg")})
-
     for message in st.session_state.messages:
         if message["fromId"] != this_user:
             with st.chat_message(message["role"]):
-                st.button(message["fromId"], key=message["fromId"], on_click=update2, args=[message["fromId"]])
+                st.button(message["fromId"], key=message["fromId"], on_click=route_to_chat_view, args=[message["fromId"]])
 
