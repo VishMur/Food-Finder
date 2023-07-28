@@ -2,6 +2,7 @@ import random
 
 import streamlit as st
 from google.cloud import firestore
+from st_keyup import st_keyup
 from streamlit_extras.switch_page_button import switch_page
 
 st.set_page_config(
@@ -13,18 +14,19 @@ db = firestore.Client.from_service_account_json("firestore-key.json")
 
 if 'num' not in st.session_state:
     st.session_state.num = "1"
-if 'inputted_text' not in st.session_state:
-    st.session_state.refresh = "0"
 if 'to_chat' not in st.session_state:
     st.session_state.to_chat = ""
+if 'val' not in st.session_state:
+    st.session_state.val = ""
+
 
 messages_collection = db.collection("messages")
 st.session_state.chat_messages = []
 
 def route_to_chat_view(word):
-    rand_key = random.randint(0, 10000000)
     st.session_state.to_chat = word
-    st.button("Return", on_click=route_to_chatlist_view, key=str(rand_key))
+    st.session_state.num = "2"
+    st.button("Return", on_click=route_to_chatlist_view, key=str(random.randint(0, 10000000)))
     st.write(word)
 
     for document in messages_collection.stream():
@@ -35,14 +37,36 @@ def route_to_chat_view(word):
             with st.chat_message(message["role"]):
                 st.write(message["fromId"], message["content"])
 
-    st.button("Return", on_click=reload, key="1232222")
+    def get_prompt(this_user, word):
+        st.write("prompt", prompt)
+        reload(prompt, this_user, word)
 
-    if prompt := st.chat_input("What is up?"):
-        st.session_state.messages.append({"role": "user", "content": prompt})
+    def dummy(word):
+        st.write("prompt", prompt)
+        dummy_rel(word)
 
-def reload():
-    st.write("reloaded")
-    route_to_chat_view("User2")
+    def control(this_user, word):
+        dummy(word)
+        get_prompt(this_user, word)
+
+    prompt = st.text_input('Enter Message', key=str(random.randint(0, 10000000)))
+    # st.button('Send', on_click=dummy, args=[word])
+    st.button('Send it', on_click=control, args=[this_user, word], key=str(random.randint(0, 10000000)))
+
+def dummy_rel(word):
+    route_to_chat_view(word)
+
+def reload(prompt, this_user, word):
+    data = {
+        'from': this_user,
+        'to': word,
+        'msg': str(prompt),
+        # Add more fields as needed.
+    }
+
+    # Use the 'add()' method to add the document to the collection.
+    new_document_ref = messages_collection.add(data)
+    route_to_chat_view(word)
 
 
 def route_to_chatlist_view():
@@ -63,5 +87,3 @@ if st.session_state.num == "1":
             with st.chat_message(message["role"]):
                 st.button(message["fromId"], key=message["fromId"], on_click=route_to_chat_view, args=[message["fromId"]])
 
-elif st.session_state.refresh == "1":
-    st.write("wow")
