@@ -24,6 +24,11 @@ from sklearn.cluster import KMeans
 def check_password():
     """Returns `True` if the user had a correct password."""
 
+    # Error occurs on login page, then src code is changed, then cache is cleared, NO refresh,
+    # and attempt to re-login
+        # occurs w/o password being entered (on_change)
+        # occurs infinite times in current session
+
     def password_entered():
         """Checks whether a password entered by the user is correct."""
         user = authenticate(
@@ -65,7 +70,7 @@ if check_password():
     # Helper functions
     # -----------------------------------------------------------
     # Load data from external source
-    @st.cache
+    @st.cache_data
     def load_data():
         df = pd.read_csv(
             "https://raw.githubusercontent.com/ThuwarakeshM/PracticalML-KMeans-Election/master/voters_demo_sample.csv"
