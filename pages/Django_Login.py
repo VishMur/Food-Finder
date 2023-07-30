@@ -8,8 +8,6 @@ application = get_wsgi_application()
 
 import streamlit as st
 
-
-
 def check_password():
     """Returns `True` if the user had a correct password."""
 
