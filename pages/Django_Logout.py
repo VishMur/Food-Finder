@@ -2,8 +2,6 @@ import streamlit as st
 
 st.title("Logout Page")
 
-def logout_success():
-
 
 try:
     if st.session_state["password_correct"]:
