@@ -21,6 +21,7 @@ def check_password():
         user = authenticate(
             username=st.session_state["username"], password=st.session_state["password"]
         )
+        st.session_state["user"] = user
 
         if user is not None:
             st.session_state["password_correct"] = True
