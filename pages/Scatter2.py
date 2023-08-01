@@ -10,20 +10,29 @@ Adapted from the deck.gl documentation.
 import streamlit as st
 import pydeck as pdk
 import pandas as pd
-from django_api.models import Entity, Producer
+from django_api.models import Entity, Producer, FoodItem
 
 data = []
 
 all_entities = Entity.objects.all()
 for entity in all_entities:
     entity_producer = Producer.objects.filter(entity=entity).first()
-    new_data = {'name': entity.user.first_name,
+    producer_all_food = FoodItem.objects.filter(producer=entity_producer)
+    all_food_str = "Currently available foods:"
+    for food_item in producer_all_food:
+        all_food_str += "\n- " + food_item.name + " (" + str(food_item.quantity) + ")"
+    new_data = {
+        'name': entity.user.first_name,
         'latitude': float(entity.latitude),
         'longitude': float(entity.longitude),
-        'description': entity_producer.description}
+        'description': entity_producer.description,
+        'food_items': all_food_str,
+    }
 
     data.append(new_data)
 
+def my_func():
+    print("clicked on!")
 
 # Define a layer to display on a map
 layer = pdk.Layer(
@@ -47,5 +56,5 @@ layer = pdk.Layer(
 #view_state = pdk.ViewState(latitude=37.7749295, longitude=-122.4194155, zoom=10, bearing=0, pitch=0)
 
 # Render
-r = pdk.Deck(layers=[layer], tooltip={"text": "{name}"})
+r = pdk.Deck(layers=[layer], tooltip={"text": "{name} \n{food_items}"})
 st.pydeck_chart(r)
