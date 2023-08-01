@@ -11,13 +11,30 @@ import streamlit as st
 import pydeck as pdk
 import pandas as pd
 from django_api.models import Entity, Producer, FoodItem
+from django.contrib.auth.models import User
+
+@st.cache_data
+def all_users():
+    return User.objects.all()
+
+@st.cache_data
+def all_entities():
+    return Entity.objects.all()
+
+@st.cache_data
+def all_producers():
+    return Producer.objects.all()
+
+@st.cache_data
+def all_food_items():
+    return FoodItem.objects.all()
 
 data = []
 
-all_entities = Entity.objects.all()
-for entity in all_entities:
-    entity_producer = Producer.objects.filter(entity=entity).first()
-    producer_all_food = FoodItem.objects.filter(producer=entity_producer)
+
+for entity in all_entities():
+    entity_producer = all_producers().filter(entity=entity).first()
+    producer_all_food = all_food_items().filter(producer=entity_producer)
     all_food_str = "Currently available foods:"
     for food_item in producer_all_food:
         all_food_str += "\n- " + food_item.name + " (" + str(food_item.quantity) + ")"
@@ -31,8 +48,6 @@ for entity in all_entities:
 
     data.append(new_data)
 
-def my_func():
-    print("clicked on!")
 
 # Define a layer to display on a map
 layer = pdk.Layer(
@@ -57,4 +72,21 @@ layer = pdk.Layer(
 
 # Render
 r = pdk.Deck(layers=[layer], tooltip={"text": "{name} \n{food_items}"})
-st.pydeck_chart(r)
+
+col1, col2 = st.columns([1, 2])
+
+producer_options = []
+for producer in all_producers():
+    producer_options.append(producer)
+
+with col1:
+    select = st.selectbox("**Select or search for a producer:**", producer_options)
+    st.markdown(select.entity.user.first_name)
+    with st.expander("See description"):
+        st.write(select.description)
+    with st.expander("See inventory"):
+        producer_all_food = all_food_items().filter(producer=select)
+        for food_item in producer_all_food:
+            st.write(food_item)
+with col2:
+    st.pydeck_chart(r)
