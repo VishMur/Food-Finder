@@ -24,7 +24,7 @@ class Entity(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.user.__str__()
+        return self.user.first_name
 
 class Producer(models.Model):
     entity = models.OneToOneField(Entity, on_delete=models.CASCADE)
