@@ -57,7 +57,7 @@ layer = pdk.Layer(
     opacity=0.8,
     stroked=True,
     filled=True,
-    get_radius=1000,
+    get_radius=10000,
     radius_scale=6,
     radius_min_pixels=1,
     radius_max_pixels=100,
@@ -71,7 +71,7 @@ layer = pdk.Layer(
 #view_state = pdk.ViewState(latitude=37.7749295, longitude=-122.4194155, zoom=10, bearing=0, pitch=0)
 
 # Render
-r = pdk.Deck(layers=[layer], tooltip={"text": "{name} \n{food_items}"})
+r = pdk.Deck(map_style=None, layers=[layer], tooltip={"text": "{name} \n{food_items}"})
 
 col1, col2 = st.columns([1, 2])
 
@@ -79,7 +79,7 @@ producer_options = []
 for producer in all_producers():
     producer_options.append(producer)
 
-with col1:
+with st.sidebar:
     select = st.selectbox("**Select or search for a producer:**", producer_options)
     st.markdown(select.entity.user.first_name)
     with st.expander("See description"):
@@ -88,5 +88,7 @@ with col1:
         producer_all_food = all_food_items().filter(producer=select)
         for food_item in producer_all_food:
             st.write(food_item)
-with col2:
-    st.pydeck_chart(r)
+
+
+st.pydeck_chart(r)
+# st.map(data, use_container_width=False)
