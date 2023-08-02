@@ -1,5 +1,5 @@
 import streamlit as st
-from django_api.models import Entity, Producer, FoodItem, FoodType
+from django_api.models import Entity, Producer, FoodItem, FoodType, Volunteer
 from pages.Django_Login import check_password
 
 # if user is logged in:
@@ -30,6 +30,12 @@ def get_user_entity():
 def get_producer():
     try:
         return Producer.objects.all().filter(entity=get_user_entity()).first()
+    except AttributeError:
+        return None
+
+def get_volunteer():
+    try:
+        return Volunteer.objects.all().filter(entity=get_user_entity()).first()
     except AttributeError:
         return None
 
@@ -217,7 +223,6 @@ if check_password():
                                 food_item.quantity = quantity_input
                                 food_item.save()
                             except NameError:
-
                                 food_item = FoodItem.objects.create(
                                     name=food_name_input,
                                     type=food_type_input,
@@ -267,6 +272,27 @@ if check_password():
                     website_link = website_input,
                     )
                     current_producer.save()
+
+    st.divider()
+
+    if get_volunteer() is not None:
+        current_volunteer = get_volunteer()
+        st.write("You have an associated volunteer account.")
+        with st.expander("See volunteer account details:"):
+            st.write(f"**{current_volunteer}**")
+            st.write(f"Deliveries: {current_volunteer.deliveries}")
+    else:
+        st.write("You do not have an associated producer account. Register now?")
+        if current_entity is None:
+            st.warning("Please fill in all of the **required*** fields and then save changes.", icon="⚠️")
+        if (st.button("Create volunteer account")):
+            current_volunteer = Volunteer.objects.create(
+                entity=current_entity,
+                deliveries=0
+            )
+            current_volunteer.save()
+            st.toast("Account successfully created!", icon="✅")
+
 
 
 else:
