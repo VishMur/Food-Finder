@@ -31,6 +31,7 @@ def get_user_entity():
 # first login is a user
 if check_password():
     current_user = st.session_state["user"]
+    current_entity = get_user_entity()
 
     left_column, right_column = st.columns(2)
     with left_column:
@@ -65,7 +66,13 @@ if check_password():
         current_user.first_name = first_name_input
         current_user.last_name = last_name_input
         current_user.email = email_input
+        current_entity.phone_number = phone_number_input
+        current_entity.latitude = latitude_input
+        current_entity.longitude = longitude_input
+        current_entity.address = address_input
+
         current_user.save()
+        current_entity.save()
 
     st.button("Save changes", on_click=post_to_db())
 
