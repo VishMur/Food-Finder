@@ -1,6 +1,7 @@
 import streamlit as st
 from django_api.models import Entity, Producer, FoodItem, FoodType, Volunteer
 from pages.Django_Login import check_password
+import pydeck as pdk
 
 # if user is logged in:
     # check if user has a producer account linked:
@@ -73,6 +74,48 @@ if check_password():
             with col2:
                 longitude_input = st.text_input(label="**Longitude***", value=get_user_entity().longitude)
             address_input = st.text_input(label="Address", value=get_user_entity().address)
+
+            if get_producer():
+                st.subheader("Your Map")
+                data = []
+                producer_all_food = get_food_items().filter(producer=get_producer())
+                all_food_str = "Currently available foods:"
+                for food_item in producer_all_food:
+                    all_food_str += "\n- " + food_item.name + " (" + str(food_item.quantity) + ")"
+                new_data = {
+                    'name':st.session_state["user"].first_name,
+                    'latitude': float(get_user_entity().latitude),
+                    'longitude': float(get_user_entity().longitude),
+                    'description': get_producer().description,
+                    'food_items': all_food_str,
+                }
+
+                data.append(new_data)
+
+                layer = pdk.Layer(
+                    "ScatterplotLayer",
+                    data,
+                    pickable=True,
+                    opacity=0.8,
+                    stroked=True,
+                    filled=True,
+                    get_radius=10000,
+                    radius_scale=6,
+                    radius_min_pixels=1,
+                    radius_max_pixels=100,
+                    line_width_min_pixels=1,
+                    get_position=["longitude", "latitude"],
+                    get_fill_color=[255, 140, 0],
+                    get_line_color=[0, 0, 0],
+                )
+
+                # Set the viewport location
+                # view_state = pdk.ViewState(latitude=37.7749295, longitude=-122.4194155, zoom=10, bearing=0, pitch=0)
+
+                # Render
+                r = pdk.Deck(map_style=None, layers=[layer], tooltip={"text": "{name} \n{food_items}"})
+                st.pydeck_chart(r)
+
         else:
             phone_number_input = st.text_input(label="Phone number")
             col1, col2 = st.columns(2)
