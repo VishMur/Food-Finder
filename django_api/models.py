@@ -13,7 +13,7 @@ class FoodType(models.Model):
 
 class Entity(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.IntegerField(null=True, blank=True)
+    phone_number = models.CharField(max_length=100)
     latitude = models.DecimalField(
         max_digits=20,
         decimal_places=15)
