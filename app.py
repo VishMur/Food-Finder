@@ -17,7 +17,7 @@ import streamlit as st
 
 from sklearn.cluster import KMeans
 
-from Pages.Django_Login import check_password
+from pages.Django_Login import check_password
 
 
 if check_password():
