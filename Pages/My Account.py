@@ -1,5 +1,5 @@
 import streamlit as st
-from django_api.models import Entity, Producer
+from django_api.models import Entity, Producer, FoodItem, FoodType
 from pages.Django_Login import check_password
 
 # if user is logged in:
@@ -17,7 +17,7 @@ from pages.Django_Login import check_password
     ## optional: registered volunteers can bookmark
     # if producer, highlight the locations that are registered as yours
 
-st.title("My Account")
+st.title("My Profile")
 
 
 
@@ -27,6 +27,20 @@ def get_user_entity():
     entity = Entity.objects.all().filter(user=current_user).first()
     return entity
 
+def get_producer():
+    try:
+        return Producer.objects.all().filter(entity=get_user_entity()).first()
+    except AttributeError:
+        return None
+
+def get_food_items():
+    try:
+        return FoodItem.objects.all().filter(producer=get_producer())
+    except AttributeError:
+        return None
+
+def get_food_types():
+    return FoodType.objects.all()
 
 # first login is a user
 if check_password():
@@ -117,15 +131,67 @@ if check_password():
             current_entity.address = address_input
             current_entity.save()
 
-    if st.button("Save changes"):
+    if st.button("Save Profile"):
         if (name_clean()
             and latitude_clean()
             and longitude_clean()
         ):
             post_to_db(current_entity)
-            st.success("Account successfully updated!", icon="✅")
+            st.toast("Account successfully updated!", icon="✅")
 
+    st.subheader("Associated Account Details")
 
+    if get_producer() is not None:
+        current_producer = get_producer()
+        st.write("You have an associated producer account.")
+        with st.expander("See producer account details:"):
+            st.write(f"**{current_producer}**")
+            st.write(f"Deliveries: {current_producer.deliveries}")
+            producer_description_input = st.text_area(label="Description", value=current_producer.description)
+            website_input = st.text_input(label="Website", value=current_producer.website_link)
+            if(st.button("Save changes")):
+                current_producer.description = producer_description_input
+                current_producer.website = website_input
+                current_producer.save()
+
+        with st.expander("See producer inventory:"):
+            st.markdown("**Inventory:**")
+            count = 0
+            for food_item in get_food_items():
+                col1, col2 = st.columns(2)
+                with col1:
+                    food_name_input = st.text_input(label="Food name",value=f"{food_item.name}")
+                with col2:
+                    food_type_input = st.selectbox("Food type", get_food_types(), key=count)
+                food_item_description_input = st.text_area(label="Food description",value=food_item.description)
+
+                def food_name_clean():
+                    if food_name_input == "":
+                        st.warning('Food name is required!', icon="⚠️")
+                        return False
+                    else:
+                        return True
+
+                def food_description_clean():
+                    if food_item_description_input == "":
+                        st.warning('Food description is required!', icon="⚠️")
+                        return False
+                    else:
+                        return True
+
+                if st.button(f"Save changes to {food_item.name}"):
+                    if (food_name_clean()
+                        and food_description_clean()
+                    ):
+                        food_item.name = food_name_input
+                        food_item.type = food_type_input
+                        food_item.description = food_item_description_input
+                        food_item.save()
+
+                st.divider()
+                count += 1
+    else:
+        st.write("You do not have an associated producer account. Register now?")
 
 else:
     st.markdown("You are not currently logged in. Log in?")
