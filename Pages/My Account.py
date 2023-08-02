@@ -150,6 +150,18 @@ if check_password():
     if get_producer() is not None:
         current_producer = get_producer()
         st.write("You have an associated producer account.")
+        if st.button("Delete producer account"):
+            try:
+                if st.session_state["warning"]:
+                    current_producer.delete()
+                    st.toast("Producer account successfully deleted!", icon="✅")
+                    st.session_state["warning"] = False
+                else:
+                    st.session_state["warning"] = True
+                    st.warning("Are you sure you want to delete?")
+            except KeyError:
+                st.session_state["warning"] = True
+                st.warning("Are you sure you want to delete?")
         with st.expander("See producer account details:"):
             st.write(f"**{current_producer}**")
             st.write(f"Deliveries: {current_producer.deliveries}")
