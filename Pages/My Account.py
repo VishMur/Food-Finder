@@ -222,6 +222,22 @@ if check_password():
                 count += 1
     else:
         st.write("You do not have an associated producer account. Register now?")
+        if current_entity is None:
+            st.warning("Please fill in all of the **required*** fields and then save changes.", icon="⚠️")
+        else:
+            with st.expander("See producer account details:"):
+                st.write(f"**{current_entity}**")
+                st.write("Deliveries: 0")
+                producer_description_input = st.text_area(label="**Description***")
+                website_input = st.text_input(label="Website")
+                if (st.button("Save changes")):
+                    current_producer = Producer.objects.create(
+                    entity=current_entity,
+                    description = producer_description_input,
+                    website_link = website_input,
+                    )
+                    current_producer.save()
+
 
 else:
     st.markdown("You are not currently logged in. Log in?")
