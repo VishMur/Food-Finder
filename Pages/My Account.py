@@ -278,6 +278,18 @@ if check_password():
     if get_volunteer() is not None:
         current_volunteer = get_volunteer()
         st.write("You have an associated volunteer account.")
+        if st.button("Delete volunteer account"):
+            try:
+                if st.session_state["warning"]:
+                    current_volunteer.delete()
+                    st.toast("Volunteer account successfully deleted!", icon="✅")
+                    st.session_state["warning"] = False
+                else:
+                    st.session_state["warning"] = True
+                    st.warning("Are you sure you want to delete?")
+            except KeyError:
+                st.session_state["warning"] = True
+                st.warning("Are you sure you want to delete?")
         with st.expander("See volunteer account details:"):
             st.write(f"**{current_volunteer}**")
             st.write(f"Deliveries: {current_volunteer.deliveries}")
