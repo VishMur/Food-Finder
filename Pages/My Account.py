@@ -157,13 +157,28 @@ if check_password():
         with st.expander("See producer inventory:"):
             st.markdown("**Inventory:**")
             count = 0
-            for food_item in get_food_items():
-                col1, col2 = st.columns(2)
-                with col1:
-                    food_name_input = st.text_input(label="Food name",value=f"{food_item.name}")
-                with col2:
-                    food_type_input = st.selectbox("Food type", get_food_types(), key=count)
-                food_item_description_input = st.text_area(label="Food description",value=food_item.description)
+            create_widget = True
+            while count < get_food_items().count():
+                if create_widget:
+                    st.write("Add a food item:")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        food_name_input = st.text_input(label="Food name")
+                    with col2:
+                        food_type_input = st.selectbox("Food type", get_food_types(), key=str(get_food_types()[count]) + "create")
+                    food_item_description_input = st.text_area(label="Food description")
+
+                    count = -1
+                    create_widget=False
+
+                else:
+                    food_item = get_food_items()[count]
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        food_name_input = st.text_input(label="Food name",value=f"{food_item.name}")
+                    with col2:
+                        food_type_input = st.selectbox("Food type", get_food_types(), key=get_food_types()[count])
+                    food_item_description_input = st.text_area(label="Food description",value=food_item.description)
 
                 def food_name_clean():
                     if food_name_input == "":
@@ -179,7 +194,7 @@ if check_password():
                     else:
                         return True
 
-                if st.button(f"Save changes to {food_item.name}"):
+                if st.button("Save changes", key=count):
                     if (food_name_clean()
                         and food_description_clean()
                     ):
