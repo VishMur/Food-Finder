@@ -44,7 +44,7 @@ if check_password():
         email_input = st.text_input(label="Email address", value=current_user.email)
 
     with st.container():
-        st.header("Additional Info")
+        st.subheader("Additional Info")
         if (get_user_entity()):
             phone_number_input = st.text_input(label="Phone number", value=get_user_entity().phone_number)
             col1, col2 = st.columns(2)
@@ -62,19 +62,69 @@ if check_password():
                 longitude_input = st.text_input(label="**Longitude***")
             address_input = st.text_input(label="Address")
 
-    def post_to_db():
+
+    def name_clean():
+        if first_name_input == "":
+            st.warning('First name or Organization name is required!', icon="⚠️")
+            return False
+        else:
+            return True
+
+    def latitude_clean():
+        if latitude_input == "":
+            st.warning('Latitude is required!', icon="⚠️")
+            return False
+        # some other verification that latitude are within bounds
+        try:
+            float(latitude_input)
+            return True
+        except ValueError:
+            st.warning('Latitude must be a valid decimal!', icon="⚠️")
+            return False
+
+    def longitude_clean():
+        if longitude_input == "":
+            st.warning('Longitude is required!', icon="⚠️")
+            return False
+        # some other verification that longitude are within bounds
+        try:
+            float(latitude_input)
+            return True
+        except ValueError:
+            st.warning('Longitude must be a valid decimal!', icon="⚠️")
+            return False
+
+
+    def post_to_db(entity):
         current_user.first_name = first_name_input
         current_user.last_name = last_name_input
         current_user.email = email_input
-        current_entity.phone_number = phone_number_input
-        current_entity.latitude = latitude_input
-        current_entity.longitude = longitude_input
-        current_entity.address = address_input
 
         current_user.save()
-        current_entity.save()
 
-    st.button("Save changes", on_click=post_to_db())
+        if entity is None:
+            if latitude_input != "" and longitude_input != "":
+                new_entity = Entity.objects.create(user=current_user,
+                                                   phone_number=phone_number_input,
+                                                   latitude=latitude_input,
+                                                   longitude=longitude_input,
+                                                   address=address_input)
+                new_entity.save()
+        else:
+            current_entity.phone_number = phone_number_input
+            current_entity.latitude = latitude_input
+            current_entity.longitude = longitude_input
+            current_entity.address = address_input
+            current_entity.save()
+
+    if st.button("Save changes"):
+        if (name_clean()
+            and latitude_clean()
+            and longitude_clean()
+        ):
+            post_to_db(current_entity)
+            st.success("Account successfully updated!", icon="✅")
+
 
 
 else:
