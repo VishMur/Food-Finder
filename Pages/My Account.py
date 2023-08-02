@@ -158,19 +158,31 @@ if check_password():
                     st.session_state["warning"] = False
                 else:
                     st.session_state["warning"] = True
-                    st.warning("Are you sure you want to delete?")
+                    st.warning("Are you sure you want to delete? Click again to confirm.")
             except KeyError:
                 st.session_state["warning"] = True
-                st.warning("Are you sure you want to delete?")
+                st.warning("Are you sure you want to delete? Click again to confirm.")
         with st.expander("See producer account details:"):
             st.write(f"**{current_producer}**")
             st.write(f"Deliveries: {current_producer.deliveries}")
-            producer_description_input = st.text_area(label="Description", value=current_producer.description)
+            producer_description_input = st.text_area(label="**Description***", value=current_producer.description)
             website_input = st.text_input(label="Website", value=current_producer.website_link)
+
+            def producer_description_clean():
+                if producer_description_input == "":
+                    st.warning('Description is required!', icon="⚠️")
+                    return False
+                else:
+                    return True
+
+
             if(st.button("Save changes")):
-                current_producer.description = producer_description_input
-                current_producer.website = website_input
-                current_producer.save()
+                if producer_description_clean():
+                    current_producer.description = producer_description_input
+                    current_producer.website = website_input
+                    current_producer.save()
+                    st.toast("Account successfully updated!", icon="✅")
+
 
         # for loop with 3 items in it:
         # must run +1 times than producer # of food
@@ -256,10 +268,10 @@ if check_password():
                                     st.session_state["warning"] = False
                                 else:
                                     st.session_state["warning"] = True
-                                    st.warning("Are you sure you want to delete?")
+                                    st.warning("Are you sure you want to delete? Click again to confirm.")
                             except KeyError:
                                 st.session_state["warning"] = True
-                                st.warning("Are you sure you want to delete?")
+                                st.warning("Are you sure you want to delete? Click again to confirm.")
 
                 st.divider()
                 count += 1
@@ -277,13 +289,24 @@ if check_password():
                 st.write("Deliveries: 0")
                 producer_description_input = st.text_area(label="**Description***")
                 website_input = st.text_input(label="Website")
-                if (st.button("Save changes")):
-                    current_producer = Producer.objects.create(
-                    entity=current_entity,
-                    description = producer_description_input,
-                    website_link = website_input,
-                    )
-                    current_producer.save()
+
+                def producer_description_clean():
+                    if producer_description_input == "":
+                        st.warning('Description is required!', icon="⚠️")
+                        return False
+                    else:
+                        return True
+
+
+                if (st.button("Create producer account")):
+                    if producer_description_clean():
+                        current_producer = Producer.objects.create(
+                        entity=current_entity,
+                        description = producer_description_input,
+                        website_link = website_input,
+                        )
+                        current_producer.save()
+                        st.toast("Account successfully created!", icon="✅")
 
     st.divider()
 
@@ -298,10 +321,10 @@ if check_password():
                     st.session_state["warning"] = False
                 else:
                     st.session_state["warning"] = True
-                    st.warning("Are you sure you want to delete?")
+                    st.warning("Are you sure you want to delete? Click again to confirm.")
             except KeyError:
                 st.session_state["warning"] = True
-                st.warning("Are you sure you want to delete?")
+                st.warning("Are you sure you want to delete? Click again to confirm.")
         with st.expander("See volunteer account details:"):
             st.write(f"**{current_volunteer}**")
             st.write(f"Deliveries: {current_volunteer.deliveries}")
@@ -309,13 +332,17 @@ if check_password():
         st.write("You do not have an associated producer account. Register now?")
         if current_entity is None:
             st.warning("Please fill in all of the **required*** fields and then save changes.", icon="⚠️")
-        if (st.button("Create volunteer account")):
-            current_volunteer = Volunteer.objects.create(
-                entity=current_entity,
-                deliveries=0
-            )
-            current_volunteer.save()
-            st.toast("Account successfully created!", icon="✅")
+        else:
+            with st.expander("See volunteer account details:"):
+                st.write(f"**{current_entity}**")
+                st.write("Deliveries: 0")
+                if (st.button("Create volunteer account")):
+                    current_volunteer = Volunteer.objects.create(
+                        entity=current_entity,
+                        deliveries=0
+                    )
+                    current_volunteer.save()
+                    st.toast("Account successfully created!", icon="✅")
 
 
 
