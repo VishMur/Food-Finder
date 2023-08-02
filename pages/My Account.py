@@ -27,9 +27,6 @@ def get_user_entity():
     entity = Entity.objects.all().filter(user=current_user).first()
     return entity
 
-def post_to_db():
-    st.spinner("posting to db")
-
 
 # first login is a user
 if check_password():
@@ -37,32 +34,38 @@ if check_password():
 
     left_column, right_column = st.columns(2)
     with left_column:
-        st.text_input(label="**First name or Organization name***", value=current_user.first_name)
+        first_name_input = st.text_input(label="**First name or Organization name***", value=current_user.first_name)
 
     with right_column:
-        st.text_input(label="Last name", value=current_user.last_name)
+        last_name_input = st.text_input(label="Last name", value=current_user.last_name)
 
     with st.container():
-        st.text_input(label="Email address", value=current_user.email)
+        email_input = st.text_input(label="Email address", value=current_user.email)
 
     with st.container():
         st.header("Additional Info")
         if (get_user_entity()):
-            st.text_input(label="Phone number", value=get_user_entity().phone_number)
+            phone_number_input = st.text_input(label="Phone number", value=get_user_entity().phone_number)
             col1, col2 = st.columns(2)
             with col1:
-                st.text_input(label="**Latitude***", value=get_user_entity().latitude)
+                latitude_input = st.text_input(label="**Latitude***", value=get_user_entity().latitude)
             with col2:
-                st.text_input(label="**Longitude***", value=get_user_entity().longitude)
-            st.text_input(label="Address", value=get_user_entity().address)
+                longitude_input = st.text_input(label="**Longitude***", value=get_user_entity().longitude)
+            address_input = st.text_input(label="Address", value=get_user_entity().address)
         else:
-            st.text_input(label="Phone number")
+            phone_number_input = st.text_input(label="Phone number")
             col1, col2 = st.columns(2)
             with col1:
-                st.text_input(label="**Latitude***")
+                latitude_input = st.text_input(label="**Latitude***")
             with col2:
-                st.text_input(label="**Longitude***")
-            st.text_input(label="Address")
+                longitude_input = st.text_input(label="**Longitude***")
+            address_input = st.text_input(label="Address")
+
+    def post_to_db():
+        current_user.first_name = first_name_input
+        current_user.last_name = last_name_input
+        current_user.email = email_input
+        current_user.save()
 
     st.button("Save changes", on_click=post_to_db())
 
