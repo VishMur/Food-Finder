@@ -200,27 +200,48 @@ if check_password():
                     else:
                         return True
 
-                if st.button("Save changes", key="button" + str(count)):
-                    if (food_name_clean()
-                        and food_description_clean()
-                    ):
-                        try:
-                            food_item.name = food_name_input
-                            food_item.type = food_type_input
-                            food_item.description = food_item_description_input
-                            food_item.quantity = food_item_quantity_input
-                            food_item.save()
-                        except NameError:
-                            food_item = FoodItem.objects.create(
-                                name=food_name_input,
-                                type=food_type_input,
-                                description=food_item_description_input,
-                                quantity=food_item_quantity_input,
-                                producer=current_producer,
-                            )
-                            food_item.save()
-                        st.toast("Food Item successfully saved!",icon="✅")
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button("Save changes", key="button" + str(count)):
+                        if (food_name_clean()
+                            and food_description_clean()
+                        ):
+                            if food_item_quantity_input == "":
+                                quantity_input = 0
+                            else:
+                                quantity_input = int(food_item_quantity_input)
+                            try:
+                                food_item.name = food_name_input
+                                food_item.type = food_type_input
+                                food_item.description = food_item_description_input
+                                food_item.quantity = quantity_input
+                                food_item.save()
+                            except NameError:
 
+                                food_item = FoodItem.objects.create(
+                                    name=food_name_input,
+                                    type=food_type_input,
+                                    description=food_item_description_input,
+                                    quantity=quantity_input,
+                                    producer=current_producer,
+                                )
+                                food_item.save()
+                            st.toast("Food Item successfully saved!",icon="✅")
+                if count >= 0:
+                    with col2:
+                        if(st.button("Delete food", key="delete"+str(count))):
+                            try:
+                                if st.session_state["warning"]:
+                                    food_item2 = get_food_items()[count]
+                                    food_item2.delete()
+                                    count = count - 1
+                                    st.session_state["warning"] = False
+                                else:
+                                    st.session_state["warning"] = True
+                                    st.warning("Are you sure you want to delete?")
+                            except KeyError:
+                                st.session_state["warning"] = True
+                                st.warning("Are you sure you want to delete?")
 
                 st.divider()
                 count += 1
