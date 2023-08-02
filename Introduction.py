@@ -2,10 +2,15 @@ import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
 from streamlit_extras.add_vertical_space import add_vertical_space
 
+global status
 
 st.set_page_config(
     page_title="Introduction",
 )
+
+if 'log' not in st.session_state:
+    st.session_state.log = 0
+
 
 st.title("Food Finder")
 st.write("A GNEC Hackathon Submission")
