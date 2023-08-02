@@ -234,6 +234,7 @@ if check_password():
                                 if st.session_state["warning"]:
                                     food_item2 = get_food_items()[count]
                                     food_item2.delete()
+                                    st.toast("Food Item successfully deleted!", icon="✅")
                                     count = count - 1
                                     st.session_state["warning"] = False
                                 else:
