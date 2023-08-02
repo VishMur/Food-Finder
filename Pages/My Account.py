@@ -154,11 +154,15 @@ if check_password():
                 current_producer.website = website_input
                 current_producer.save()
 
+        # for loop with 3 items in it:
+        # must run +1 times than producer # of food
+
         with st.expander("See producer inventory:"):
             st.markdown("**Inventory:**")
             count = 0
             create_widget = True
-            while count < get_food_items().count():
+            while True:
+            # while count < get_food_items().count():
                 if create_widget:
                     st.write("**Add a food item:**")
                     col1, col2 = st.columns(2)
@@ -220,6 +224,10 @@ if check_password():
 
                 st.divider()
                 count += 1
+
+                if count == get_food_items().count():
+                    break
+
     else:
         st.write("You do not have an associated producer account. Register now?")
         if current_entity is None:
