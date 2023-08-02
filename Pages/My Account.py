@@ -166,6 +166,7 @@ if check_password():
                         food_name_input = st.text_input(label="Food name")
                     with col2:
                         food_type_input = st.selectbox("Food type", get_food_types(), key="create")
+                    food_item_quantity_input = st.text_input(label="Food quantity", key="quantity")
                     food_item_description_input = st.text_area(label="Food description")
 
                     count = -1
@@ -178,6 +179,7 @@ if check_password():
                         food_name_input = st.text_input(label="Food name",value=f"{food_item.name}",key=f"food_item{count}")
                     with col2:
                         food_type_input = st.selectbox("Food type", get_food_types(), key=get_food_types()[count])
+                    food_item_quantity_input = st.text_input(label="Food quantity", value=food_item.quantity, key="quantity"+str(count))
                     food_item_description_input = st.text_area(label="Food description",value=food_item.description)
 
                 def food_name_clean():
@@ -202,12 +204,14 @@ if check_password():
                             food_item.name = food_name_input
                             food_item.type = food_type_input
                             food_item.description = food_item_description_input
+                            food_item.quantity = food_item_quantity_input
                             food_item.save()
                         except NameError:
                             food_item = FoodItem.objects.create(
                                 name=food_name_input,
                                 type=food_type_input,
                                 description=food_item_description_input,
+                                quantity=food_item_quantity_input,
                                 producer=current_producer,
                             )
                             food_item.save()
