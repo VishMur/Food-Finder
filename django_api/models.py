@@ -41,6 +41,9 @@ class Volunteer(models.Model):
     entity = models.OneToOneField(Entity, on_delete=models.CASCADE)
     deliveries = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.entity.__str__()
+
 class FoodItem(models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(FoodType, on_delete=models.CASCADE)
