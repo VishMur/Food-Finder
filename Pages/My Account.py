@@ -167,11 +167,11 @@ if check_password():
                     st.write("**Add a food item:**")
                     col1, col2 = st.columns(2)
                     with col1:
-                        food_name_input = st.text_input(label="Food name")
+                        food_name_input = st.text_input(label="**Food name***")
                     with col2:
-                        food_type_input = st.selectbox("Food type", get_food_types(), key="create")
+                        food_type_input = st.selectbox("**Food type***", get_food_types(), key="create")
                     food_item_quantity_input = st.text_input(label="Food quantity", key="quantity")
-                    food_item_description_input = st.text_area(label="Food description")
+                    food_item_description_input = st.text_area(label="**Food description***")
 
                     count = -1
                     create_widget=False
@@ -180,11 +180,11 @@ if check_password():
                     food_item = get_food_items()[count]
                     col1, col2 = st.columns(2)
                     with col1:
-                        food_name_input = st.text_input(label="Food name",value=f"{food_item.name}",key=f"food_item{count}")
+                        food_name_input = st.text_input(label="**Food name***",value=f"{food_item.name}",key=f"food_item{count}")
                     with col2:
-                        food_type_input = st.selectbox("Food type", get_food_types(), key=get_food_types()[count])
+                        food_type_input = st.selectbox("**Food type***", get_food_types(), key=get_food_types()[count])
                     food_item_quantity_input = st.text_input(label="Food quantity", value=food_item.quantity, key="quantity"+str(count))
-                    food_item_description_input = st.text_area(label="Food description",value=food_item.description)
+                    food_item_description_input = st.text_area(label="**Food description***",value=food_item.description)
 
                 def food_name_clean():
                     if food_name_input == "":
