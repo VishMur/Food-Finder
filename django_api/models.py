@@ -37,9 +37,8 @@ class Producer(models.Model):
     def __str__(self):
         return self.entity.__str__()
 
-class Volunteer(Entity):
-
-    # entity = models.OneToOneField(Entity, on_delete=models.CASCADE)
+class Volunteer(models.Model):
+    entity = models.OneToOneField(Entity, on_delete=models.CASCADE)
     deliveries = models.IntegerField(default=0)
 
 class FoodItem(models.Model):
