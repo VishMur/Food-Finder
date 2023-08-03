@@ -2,13 +2,13 @@ import streamlit as st
 import os
 from django.core.wsgi import get_wsgi_application
 from django.contrib.auth import authenticate
-import streamlit as st
-from django_api.models import Entity, Producer
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_settings.settings")
 
 application = get_wsgi_application()
 
+import streamlit as st
+from django_api.models import Entity, Producer
 import streamlit as st
 
 if st.session_state.log == 0:
@@ -79,7 +79,7 @@ if st.session_state.log == 0:
             ## st.markdown("Elif")
             if submit:
                 password_entered()
-            st.error("😕 User not known or password incorrect")
+                st.error("😕 User not known or password incorrect")
             return False
         else:
             # Password correct.
