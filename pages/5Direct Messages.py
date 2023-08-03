@@ -19,7 +19,7 @@ if st.session_state.log == 0:
     st.subheader("Navigate to the Login tab!")
 
 else:
-    this_user = "User1"
+    this_user = "TestUser"
     db = firestore.Client.from_service_account_json("firestore-key.json")
 
     if 'num' not in st.session_state:
@@ -28,18 +28,11 @@ else:
         st.session_state.to_chat = ""
 
     def route_to_chat_view(word):
-        col1, col2, col3, col4 = st.columns(4)
 
         st.session_state.to_chat = word
         st.session_state.num = "2"
         st.button("Return", on_click=route_to_chatlist_view, key='key_2')
 
-        with col1:
-            st.image(get_image(user["profile_img"]), width=100)
-
-        with col2:
-            st.header(user["name"])
-            st.write(user["user_type"])
         messages_collection = db.collection("messages")
         st.session_state.chat_messages = []
 
@@ -47,9 +40,27 @@ else:
             st.session_state.chat_messages.append({"role": "user", "fromId": document.get("from"), "toId": document.get("to"),
                                               "content": document.get("msg")})
         for message in st.session_state.chat_messages:
+            col1, col2 = st.columns(2)
+            get_img1 = ""
+            get_img2 = ""
+            for user in st.session_state.users:
+                if user["name"] == word:
+                    get_img1 = user["profile_img"]
+                elif user["name"] == this_user:
+                    get_img2 = user["profile_img"]
+
+
             if (message["fromId"] == this_user and message["toId"] == word) or (message["fromId"] == word and message["toId"] == this_user):
-                with st.chat_message(message["role"]):
-                    st.write(message["fromId"], message["content"])
+                if message["fromId"] != this_user:
+                    with col1:
+                        with st.chat_message(message["role"], avatar="📄"):
+                            st.image(get_image(get_img1), width=50)
+                            st.write(message["fromId"], message["content"])
+                else:
+                    with col2:
+                        with st.chat_message(message["role"], avatar="📄"):
+                            st.image(get_image(get_img2), width=50)
+                            st.write(message["fromId"], message["content"])
 
     def route_to_chatlist_view():
         st.session_state.to_chat = ""
