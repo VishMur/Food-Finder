@@ -86,10 +86,9 @@ layer = pdk.Layer(
 )
 
 # Set the viewport location
-#view_state = pdk.ViewState(latitude=37.7749295, longitude=-122.4194155, zoom=10, bearing=0, pitch=0)
 
 # Render
-r = pdk.Deck(map_style=None, layers=[layer], tooltip={"text": "{name} \n{food_items}"})
+
 
 col1, col2 = st.columns([1, 2])
 
@@ -112,7 +111,8 @@ with st.sidebar:
         for food_item in producer_all_food:
             st.markdown(f"{food_item.name} ({food_item.quantity})")
 
+view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=3, bearing=0, pitch=0)
 
-
+r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=[layer], tooltip={"text": "{name} \n{food_items}"})
 st.pydeck_chart(r)
 # st.map(data, use_container_width=False)
