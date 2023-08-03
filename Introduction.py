@@ -5,15 +5,22 @@ from django.core.wsgi import get_wsgi_application
 from streamlit_extras.add_vertical_space import add_vertical_space
 from streamlit_extras.metric_cards import style_metric_cards
 from django.contrib.auth import authenticate
+import streamlit as st
+from pages.Django_Login import check_password
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_settings.settings")
 
 application = get_wsgi_application()
 
-import streamlit as st
+global status
 
+st.set_page_config(
+    page_title="Introduction",
+)
 
-from pages.Django_Login import check_password
+if 'log' not in st.session_state:
+    st.session_state.log = 0
+
 
 def display_introduction():
     st.title("Food Finder")
