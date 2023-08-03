@@ -100,19 +100,9 @@ if st.session_state.log == 0:
     if check_password():
         st.success("You are now logged in!", icon="✅")
 
-    # if submit and email == actual_email and password == actual_password:
-    #     # If the form is submitted and the email and password are correct,
-    #     # clear the form/container and display a success message
-    #     placeholder.empty()
-    #     st.session_state.log = 1
-    #     st.success("Login successful")
-    # elif submit and email != actual_email and password != actual_password:
-    #     st.error("Login failed")
-    # else:
-    #     pass
-    add_vertical_space(3)
+    add_vertical_space(2)
     st.markdown("<h4 style='text-align: center; color: black;'>or", unsafe_allow_html=True)
-    add_vertical_space(3)
+    add_vertical_space(2)
 
     placeholder2 = st.empty()
 
