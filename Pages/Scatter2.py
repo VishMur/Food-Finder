@@ -10,8 +10,20 @@ Adapted from the deck.gl documentation.
 import streamlit as st
 import pydeck as pdk
 import pandas as pd
+import os
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_settings.settings")
+
+application = get_wsgi_application()
+
 from django_api.models import Entity, Producer, FoodItem
 from django.contrib.auth.models import User
+
+
+
+import streamlit as st
 
 @st.cache_data
 def all_users():
@@ -32,17 +44,23 @@ def all_food_items():
 data = []
 
 
-for entity in all_entities():
-    entity_producer = all_producers().filter(entity=entity).first()
-    producer_all_food = all_food_items().filter(producer=entity_producer)
+for producer in all_producers():
+    entity = producer.entity
+    producer_all_food = all_food_items().filter(producer=producer)
     all_food_str = "Currently available foods:"
+
     for food_item in producer_all_food:
         all_food_str += "\n- " + food_item.name + " (" + str(food_item.quantity) + ")"
+
+    if producer_all_food.count() == 0:
+        all_food_str += "\n None ATM. Check back later!"
+
+
     new_data = {
         'name': entity.user.first_name,
         'latitude': float(entity.latitude),
         'longitude': float(entity.longitude),
-        'description': entity_producer.description,
+        'description': producer.description,
         'food_items': all_food_str,
     }
 
@@ -81,13 +99,19 @@ for producer in all_producers():
 
 with st.sidebar:
     select = st.selectbox("**Select or search for a producer:**", producer_options)
-    st.markdown(select.entity.user.first_name)
+    st.subheader(select.entity.user.first_name)
+    st.write(f"Deliveries: {select.deliveries}")
+    st.write(f":pushpin: {select.entity.address}")
+    st.write(f":earth_americas: {select.website_link}")
+    st.write(f":telephone_receiver: {select.entity.phone_number}")
+    st.caption(f":round_pushpin: {select.entity.latitude}, {select.entity.longitude}")
     with st.expander("See description"):
         st.write(select.description)
     with st.expander("See inventory"):
         producer_all_food = all_food_items().filter(producer=select)
         for food_item in producer_all_food:
-            st.write(food_item)
+            st.markdown(f"{food_item.name} ({food_item.quantity})")
+
 
 
 st.pydeck_chart(r)
