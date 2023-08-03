@@ -1,6 +1,6 @@
 import streamlit as st
 from django_api.models import Entity, Producer, FoodItem, FoodType, Volunteer
-from pages.Django_Login import check_password
+from Pages.Django_Login import check_password
 import pydeck as pdk
 
 # if user is logged in:
