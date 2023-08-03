@@ -28,11 +28,18 @@ else:
         st.session_state.to_chat = ""
 
     def route_to_chat_view(word):
+        col1, col2, col3, col4 = st.columns(4)
+
         st.session_state.to_chat = word
         st.session_state.num = "2"
         st.button("Return", on_click=route_to_chatlist_view, key='key_2')
-        st.write(word)
 
+        with col1:
+            st.image(get_image(user["profile_img"]), width=100)
+
+        with col2:
+            st.header(user["name"])
+            st.write(user["user_type"])
         messages_collection = db.collection("messages")
         st.session_state.chat_messages = []
 
@@ -49,7 +56,7 @@ else:
         st.session_state.num = "1"
 
     if st.session_state.num == "1":
-        st.title("Chats")
+        st.title("Direct Message Chats")
 
         users_collection = db.collection("user")
         st.session_state.users = []
