@@ -10,14 +10,8 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_settings.settings")
 
 application = get_wsgi_application()
 
-from django_api.models import *
-
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 import streamlit as st
 
-from sklearn.cluster import KMeans
 
 from pages.Django_Login import check_password
 
