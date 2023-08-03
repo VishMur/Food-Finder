@@ -244,11 +244,10 @@ if check_password():
                     with col2:
                         food_type_input = st.selectbox("**Food type***", get_food_types(), key="create")
                     food_item_quantity_input = st.text_input(label="Food quantity", key="quantity")
-                    food_item_description_input = st.text_area(label="**Food description***")
+                    food_item_description_input = st.text_area(label="**Food description***", key="description")
 
                     count = -1
                     create_widget=False
-
                 else:
                     food_item = get_food_items()[count]
                     col1, col2 = st.columns(2)
@@ -257,7 +256,7 @@ if check_password():
                     with col2:
                         food_type_input = st.selectbox("**Food type***", get_food_types(), key=get_food_types()[count])
                     food_item_quantity_input = st.text_input(label="Food quantity", value=food_item.quantity, key="quantity"+str(count))
-                    food_item_description_input = st.text_area(label="**Food description***",value=food_item.description)
+                    food_item_description_input = st.text_area(label="**Food description***",value=food_item.description, key="description" + str(count))
 
                 def food_name_clean():
                     if food_name_input == "":
@@ -276,6 +275,7 @@ if check_password():
                 col1, col2 = st.columns(2)
                 with col1:
                     if st.button("Save changes", key="button" + str(count)):
+                        ## st.markdown(count)
                         if (food_name_clean()
                             and food_description_clean()
                         ):
@@ -283,13 +283,15 @@ if check_password():
                                 quantity_input = 0
                             else:
                                 quantity_input = int(food_item_quantity_input)
+                            if count == -1:
+                                food_item = None
                             try:
                                 food_item.name = food_name_input
                                 food_item.type = food_type_input
                                 food_item.description = food_item_description_input
                                 food_item.quantity = quantity_input
                                 food_item.save()
-                            except NameError:
+                            except AttributeError:
                                 food_item = FoodItem.objects.create(
                                     name=food_name_input,
                                     type=food_type_input,
