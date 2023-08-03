@@ -6,31 +6,9 @@ st.set_page_config(
     page_title="Direct Messages",
 )
 
-from streamlit_modal import Modal
-
-import streamlit.components.v1 as components
 if st.session_state.log == 0:
     st.header("Access Denied: Please Login First")
     st.subheader("Navigate to the Login tab!")
-    # modal = Modal("Access Denied: Please Login First", "key_1")
-    # modal.open()
-    #
-    # if modal.is_open():
-    #     with modal.container():
-    #         st.write("Navigate to the Login Tab")
-#
-#         html_string = '''
-#         <h1>HTML string in RED</h1>
-#
-#         <script language="javascript">
-#           document.querySelector("h1").style.color = "red";
-#         </script>
-#         '''
-#         components.html(html_string)
-#
-#         st.write("Some fancy text")
-#         value = st.checkbox("Check me")
-#         st.write(f"Checkbox checked: {value}")
 
 else:
     this_user = "User1"
