@@ -99,13 +99,19 @@ for producer in all_producers():
 
 with st.sidebar:
     select = st.selectbox("**Select or search for a producer:**", producer_options)
-    st.markdown(select.entity.user.first_name)
+    st.subheader(select.entity.user.first_name)
+    st.write(f"Deliveries: {select.deliveries}")
+    st.write(f":pushpin: {select.entity.address}")
+    st.write(f":earth_americas: {select.website_link}")
+    st.write(f":telephone_receiver: {select.entity.phone_number}")
+    st.caption(f":round_pushpin: {select.entity.latitude}, {select.entity.longitude}")
     with st.expander("See description"):
         st.write(select.description)
     with st.expander("See inventory"):
         producer_all_food = all_food_items().filter(producer=select)
         for food_item in producer_all_food:
-            st.markdown(food_item.name)
+            st.markdown(f"{food_item.name} ({food_item.quantity})")
+
 
 
 st.pydeck_chart(r)
