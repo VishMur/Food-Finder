@@ -2,6 +2,8 @@ import streamlit as st
 import os
 from django.core.wsgi import get_wsgi_application
 from django.contrib.auth import authenticate
+import streamlit as st
+from django_api.models import Entity, Producer
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_settings.settings")
 
@@ -81,41 +83,12 @@ if st.session_state.log == 0:
             return False
         else:
             # Password correct.
+            st.session_state.log = 1
             return True
 
 
-    def verify_password():
-
-        st.session_state["user"] = None
-        if "password_correct" not in st.session_state:
-            st.session_state["password_correct"] = False
-            st.markdown("create session password_correct")
-
-        def authenticate_user(username_input, password_input):
-            st.session_state["user"] = authenticate(
-                username=username_input, password=password_input
-            )
-            st.markdown("Attempted user authentication")
-            st.markdown(st.session_state["user"])
-
-            if st.session_state["user"] is None:
-                st.markdown("Reached a None user")
-                st.session_state["password_correct"] = False
-            else:
-                st.markdown("Reached an actual user")
-                st.session_state["password_correct"] = True
-                return True
-
-        if not st.session_state["password_correct"]:
-            username_input = st.text_input("Username")
-            password_input = st.text_input("Password")
-            if (st.button("Login")):
-                authenticate_user(username_input, password_input)
-
-        if st.session_state["password_correct"]:
-            st.markdown("first True")
-            return True
-
+    if check_password():
+        pass
 
     if check_password():
         st.success("You are now logged in!", icon="✅")
@@ -132,7 +105,21 @@ if st.session_state.log == 0:
     #     pass
 
 elif st.session_state.log == 1:
-    logout_button = st.button("Logout")
-    if logout_button:
-        st.session_state.log = 0
-        st.success("Logout successful")
+    current_user = st.session_state["user"]
+    existing_entity = Entity.objects.filter(user=current_user).first()
+    existing_producer = Producer.objects.filter(entity=existing_entity)
+
+    try:
+        if st.session_state["password_correct"]:
+            logout_message = st.write("You are attempting to log out of your Streamlit account.")
+            logout_confirmation = st.error("Are you sure you want to log out?")
+            if st.button("Yes, Logout"):
+                st.session_state["password_correct"] = False
+                st.session_state.log = 0
+                st.experimental_rerun()
+
+        else:
+            st.write("You are not currently logged in.")
+
+    except KeyError:
+        st.write("You are not currently logged in. Head to our Django Login page to login!")
