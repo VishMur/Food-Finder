@@ -1,10 +1,17 @@
 from django.contrib import admin
-from .models import FoodItem, FoodType, Entity, Producer, Volunteer
+from .models import FoodItem, FoodType, Entity, Producer, Volunteer, ProducerBookmark
 
 # Register your models here.
 
-admin.site.register(FoodItem)
-admin.site.register(FoodType)
-admin.site.register(Entity)
-admin.site.register(Producer)
-admin.site.register(Volunteer)
+models_to_register = [
+    FoodItem,
+    FoodType,
+    Entity,
+    Producer,
+    Volunteer,
+    ProducerBookmark,
+
+]
+
+for model in models_to_register:
+    admin.site.register(model)
