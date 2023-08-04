@@ -28,6 +28,8 @@ else:
         st.session_state.num = 1
     if 'to_chat' not in st.session_state:
         st.session_state.to_chat = ""
+    if 'title' not in st.session_state:
+        st.session_state.title = 0
     # if 'paschat' not in st.session_state:
     #     st.session_state.paschat = ""
 
@@ -35,7 +37,24 @@ else:
 
         st.session_state.to_chat = word
         st.session_state.num = 2
-        st.button("Return", on_click=route_to_chatlist_view, key="key_2")
+        col11, col12, col13, col14 = st.columns(4)
+
+        with col11:
+            try:
+                st.session_state.title += 1
+                if st.session_state.title < 2:
+                    st.title("Chat")
+                else:
+                    route_to_chatlist_view()
+            except:
+                pass
+        with col12:
+            st.write("")
+        with col13:
+            st.write("")
+        with col14:
+            add_vertical_space(2)
+            st.button("Go Back to Chat List", on_click=route_to_chatlist_view, key="key_16")
 
         messages_collection = db.collection("messages")
         st.session_state.chat_messages = []
@@ -90,6 +109,7 @@ else:
     def route_to_chatlist_view():
         st.session_state.to_chat = ""
         st.session_state.num = 1
+        st.session_state.title = 0
 
     if st.session_state.num == 1:
         st.title("Direct Message Chats")
