@@ -122,7 +122,18 @@ for producer in all_producers():
 
 with st.sidebar:
     select = st.selectbox("**Select or search for a producer:**", producer_options)
-    st.subheader(select.entity.user.first_name)
+
+    user_entity = all_entities().filter(user=st.session_state.user).first()
+    volunteer = all_volunteers().filter(entity=user_entity).first()
+
+    def bookmarked():
+        bookmark = ProducerBookmark.objects.all().filter(producer=select, volunteer=volunteer).first()
+        if bookmark is None:
+            return ""
+        else:
+            return ":bookmark:"
+
+    st.subheader(f"{bookmarked()} {select.entity.user.first_name}")
     st.write(f"Deliveries: {select.deliveries}")
     st.write(f":pushpin: {select.entity.address}")
     st.write(f":earth_americas: {select.website_link}")
@@ -134,7 +145,6 @@ with st.sidebar:
         producer_all_food = all_food_items().filter(producer=select)
         for food_item in producer_all_food:
             st.markdown(f"{food_item.name} ({food_item.quantity})")
-
 
     if(st.button("Bookmark producer",
                  disabled=bookmark_button_disabled(),
