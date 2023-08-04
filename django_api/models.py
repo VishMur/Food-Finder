@@ -48,7 +48,8 @@ class ProducerBookmark(models.Model):
     producer = models.ForeignKey(Producer, on_delete=models.PROTECT)
     volunteer = models.ForeignKey(Volunteer, on_delete=models.PROTECT)
     date_bookmarked = models.DateTimeField(auto_now_add=True)
-
+    class Meta:
+        unique_together = ["producer", "volunteer"]
 
 class FoodItem(models.Model):
     name = models.CharField(max_length=100)
