@@ -1,3 +1,5 @@
+import random
+
 import streamlit as st
 from google.cloud import firestore
 from streamlit_extras.switch_page_button import switch_page
@@ -23,15 +25,17 @@ else:
     db = firestore.Client.from_service_account_json("firestore-key.json")
 
     if 'num' not in st.session_state:
-        st.session_state.num = "1"
+        st.session_state.num = 1
     if 'to_chat' not in st.session_state:
         st.session_state.to_chat = ""
+    # if 'paschat' not in st.session_state:
+    #     st.session_state.paschat = ""
 
     def route_to_chat_view(word):
 
         st.session_state.to_chat = word
-        st.session_state.num = "2"
-        st.button("Return", on_click=route_to_chatlist_view, key='key_2')
+        st.session_state.num = 2
+        st.button("Return", on_click=route_to_chatlist_view, key="key_2")
 
         messages_collection = db.collection("messages")
         st.session_state.chat_messages = []
@@ -85,9 +89,9 @@ else:
 
     def route_to_chatlist_view():
         st.session_state.to_chat = ""
-        st.session_state.num = "1"
+        st.session_state.num = 1
 
-    if st.session_state.num == "1":
+    if st.session_state.num == 1:
         st.title("Direct Message Chats")
 
         users_collection = db.collection("user")
@@ -117,7 +121,11 @@ else:
                         st.button("Enter Chat", key=user["name"], on_click=route_to_chat_view, args=[user["name"]])
 
                         st.write(user["join_date"])
-
+    elif st.session_state.num == 2:
+        try:
+            route_to_chat_view(st.session_state.to_chat)
+        except:
+            pass
 
 
 
