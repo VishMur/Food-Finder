@@ -126,8 +126,9 @@ with st.sidebar:
     user_entity = all_entities().filter(user=st.session_state.user).first()
     volunteer = all_volunteers().filter(entity=user_entity).first()
 
+    bookmark = ProducerBookmark.objects.all().filter(producer=select, volunteer=volunteer).first()
+
     def bookmarked():
-        bookmark = ProducerBookmark.objects.all().filter(producer=select, volunteer=volunteer).first()
         if bookmark is None:
             return ""
         else:
@@ -146,19 +147,27 @@ with st.sidebar:
         for food_item in producer_all_food:
             st.markdown(f"{food_item.name} ({food_item.quantity})")
 
-    if(st.button("Bookmark producer",
-                 disabled=bookmark_button_disabled(),
-                 help=bookmark_help_message())
-    ):
-        try:
-            new_bookmark = ProducerBookmark.objects.create(
-                producer=select,
-                volunteer=st.session_state.volunteer,
-            )
-            new_bookmark.save()
-            st.toast("Producer successfully bookmarked!", icon="✅")
-        except IntegrityError:
-            st.error("Producer already bookmarked!")
+    bookmark_left, bookmark_right = st.columns(2)
+
+    with bookmark_left:
+        if(st.button("Bookmark producer",
+                     disabled=bookmark_button_disabled(),
+                     help=bookmark_help_message())
+        ):
+            try:
+                new_bookmark = ProducerBookmark.objects.create(
+                    producer=select,
+                    volunteer=st.session_state.volunteer,
+                )
+                new_bookmark.save()
+                st.toast("Producer successfully bookmarked!", icon="✅")
+            except IntegrityError:
+                st.error("Producer already bookmarked!")
+    with bookmark_right:
+        if(st.button("Remove bookmark")):
+            if bookmark is not None:
+                bookmark.delete()
+                st.toast("Bookmark successfully removed!", icon="✅")
 
 
 view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=3, bearing=0, pitch=0)
