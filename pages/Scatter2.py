@@ -13,6 +13,7 @@ import pandas as pd
 import os
 
 from django.core.wsgi import get_wsgi_application
+from django.db import IntegrityError
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_settings.settings")
 
@@ -139,12 +140,15 @@ with st.sidebar:
                  disabled=bookmark_button_disabled(),
                  help=bookmark_help_message())
     ):
-        new_bookmark = ProducerBookmark.objects.create(
-            producer=select,
-            volunteer=st.session_state.volunteer,
-        )
-        new_bookmark.save()
-        st.toast("Producer successfully bookmarked!", icon="✅")
+        try:
+            new_bookmark = ProducerBookmark.objects.create(
+                producer=select,
+                volunteer=st.session_state.volunteer,
+            )
+            new_bookmark.save()
+            st.toast("Producer successfully bookmarked!", icon="✅")
+        except IntegrityError:
+            st.error("Producer already bookmarked!")
 
 
 view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=3, bearing=0, pitch=0)
