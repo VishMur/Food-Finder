@@ -44,6 +44,12 @@ class Volunteer(models.Model):
     def __str__(self):
         return self.entity.__str__()
 
+class ProducerBookmark(models.Model):
+    producer = models.ForeignKey(Producer, on_delete=models.PROTECT)
+    volunteer = models.ForeignKey(Volunteer, on_delete=models.PROTECT)
+    date_bookmarked = models.DateTimeField(auto_now_add=True)
+
+
 class FoodItem(models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(FoodType, on_delete=models.CASCADE)
