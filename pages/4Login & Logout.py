@@ -190,6 +190,8 @@ if st.session_state.log == 0:
                 user.first_name = self.name
                 user.last_name = self.last_name
 
+                user.save()
+
                 return user
 
 
