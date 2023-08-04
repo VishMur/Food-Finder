@@ -22,6 +22,7 @@ application = get_wsgi_application()
 from django_api.models import Entity, Producer, FoodItem, Volunteer, ProducerBookmark
 from django.contrib.auth.models import User
 
+from streamlit_extras.add_vertical_space import add_vertical_space
 
 
 import streamlit as st
@@ -120,6 +121,23 @@ producer_options = []
 for producer in all_producers():
     producer_options.append(producer)
 
+
+def display_producer(producer):
+    global producer_all_food, food_item
+    st.subheader(f"{bookmarked()} {producer.entity.user.first_name}")
+    st.write(f"Deliveries: {producer.deliveries}")
+    st.write(f":pushpin: {producer.entity.address}")
+    st.write(f":earth_americas: {producer.website_link}")
+    st.write(f":telephone_receiver: {producer.entity.phone_number}")
+    st.caption(f":round_pushpin: {producer.entity.latitude}, {producer.entity.longitude}")
+    with st.expander("See description"):
+        st.write(producer.description)
+    with st.expander("See inventory"):
+        producer_all_food = all_food_items().filter(producer=producer)
+        for food_item in producer_all_food:
+            st.markdown(f"{food_item.name} ({food_item.quantity})")
+
+
 with st.sidebar:
     select = st.selectbox("**Select or search for a producer:**", producer_options)
 
@@ -134,18 +152,8 @@ with st.sidebar:
         else:
             return ":bookmark:"
 
-    st.subheader(f"{bookmarked()} {select.entity.user.first_name}")
-    st.write(f"Deliveries: {select.deliveries}")
-    st.write(f":pushpin: {select.entity.address}")
-    st.write(f":earth_americas: {select.website_link}")
-    st.write(f":telephone_receiver: {select.entity.phone_number}")
-    st.caption(f":round_pushpin: {select.entity.latitude}, {select.entity.longitude}")
-    with st.expander("See description"):
-        st.write(select.description)
-    with st.expander("See inventory"):
-        producer_all_food = all_food_items().filter(producer=select)
-        for food_item in producer_all_food:
-            st.markdown(f"{food_item.name} ({food_item.quantity})")
+
+    display_producer(select)
 
     bookmark_left, bookmark_right = st.columns(2)
 
@@ -161,14 +169,33 @@ with st.sidebar:
                 )
                 new_bookmark.save()
                 st.toast("Producer successfully bookmarked!", icon="✅")
+                st.experimental_rerun()
             except IntegrityError:
                 st.error("Producer already bookmarked!")
     with bookmark_right:
-        if(st.button("Remove bookmark")):
+        if(st.button("Remove bookmark", key="searchbar_remove_button")):
             if bookmark is not None:
                 bookmark.delete()
                 st.toast("Bookmark successfully removed!", icon="✅")
+                st.experimental_rerun()
 
+    st.divider()
+
+    if st.session_state.volunteer is not None:
+        st.subheader("View bookmarks")
+        add_vertical_space()
+        volunteer_bookmarks = ProducerBookmark.objects.all().filter(volunteer=volunteer)
+        if volunteer_bookmarks.count() == 0:
+            st.write("You have no bookmarks!")
+        count = 0
+        for bookmark in volunteer_bookmarks:
+            display_producer(bookmark.producer)
+            if st.button("Remove bookmark", key="remove_bookmark"+str(count)):
+                bookmark.delete()
+                st.toast("Bookmark successfully removed!", icon="✅")
+                st.experimental_rerun()
+            st.divider()
+            count += 1
 
 view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=3, bearing=0, pitch=0)
 
