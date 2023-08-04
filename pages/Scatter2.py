@@ -18,7 +18,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_settings.settings")
 
 application = get_wsgi_application()
 
-from django_api.models import Entity, Producer, FoodItem
+from django_api.models import Entity, Producer, FoodItem, Volunteer
 from django.contrib.auth.models import User
 
 
@@ -34,12 +34,33 @@ def all_entities():
     return Entity.objects.all()
 
 @st.cache_data
+def all_volunteers():
+    return Volunteer.objects.all()
+
+@st.cache_data
 def all_producers():
     return Producer.objects.all()
 
 @st.cache_data
 def all_food_items():
     return FoodItem.objects.all()
+
+def bookmark_button_disabled():
+    user = st.session_state["user"]
+    user_entity = all_entities().filter(user=user).first()
+    volunteer = all_volunteers().filter(entity=user_entity).first()
+    if volunteer is None:
+        return True
+    else:
+        return False
+
+def bookmark_help_message():
+    if bookmark_button_disabled():
+        return "Login or create a volunteer account to bookmark locations!"
+    else:
+        return "Bookmark locations for the future!"
+
+
 
 data = []
 
@@ -110,6 +131,9 @@ with st.sidebar:
         producer_all_food = all_food_items().filter(producer=select)
         for food_item in producer_all_food:
             st.markdown(f"{food_item.name} ({food_item.quantity})")
+
+
+    st.button("Bookmark location", disabled=bookmark_button_disabled(), help=bookmark_help_message())
 
 view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=3, bearing=0, pitch=0)
 

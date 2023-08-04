@@ -395,7 +395,7 @@ else:
                 st.write(f"**{current_volunteer}**")
                 st.write(f"Deliveries: {current_volunteer.deliveries}")
         else:
-            st.write("You do not have an associated producer account. Register now?")
+            st.write("You do not have an associated volunteer account. Register now?")
             if current_entity is None:
                 st.warning("Please fill in all of the **required*** fields and then save changes.", icon="⚠️")
             else:
