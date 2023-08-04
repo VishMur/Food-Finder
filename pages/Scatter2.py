@@ -18,7 +18,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_settings.settings")
 
 application = get_wsgi_application()
 
-from django_api.models import Entity, Producer, FoodItem, Volunteer
+from django_api.models import Entity, Producer, FoodItem, Volunteer, ProducerBookmark
 from django.contrib.auth.models import User
 
 
@@ -49,10 +49,12 @@ def bookmark_button_disabled():
     user = st.session_state["user"]
     user_entity = all_entities().filter(user=user).first()
     volunteer = all_volunteers().filter(entity=user_entity).first()
+    st.session_state["volunteer"] = volunteer
     if volunteer is None:
         return True
     else:
         return False
+
 
 def bookmark_help_message():
     if bookmark_button_disabled():
@@ -133,7 +135,17 @@ with st.sidebar:
             st.markdown(f"{food_item.name} ({food_item.quantity})")
 
 
-    st.button("Bookmark location", disabled=bookmark_button_disabled(), help=bookmark_help_message())
+    if(st.button("Bookmark producer",
+                 disabled=bookmark_button_disabled(),
+                 help=bookmark_help_message())
+    ):
+        new_bookmark = ProducerBookmark.objects.create(
+            producer=select,
+            volunteer=st.session_state.volunteer,
+        )
+        new_bookmark.save()
+        st.toast("Producer successfully bookmarked!", icon="✅")
+
 
 view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=3, bearing=0, pitch=0)
 
