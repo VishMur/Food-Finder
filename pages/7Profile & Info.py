@@ -1,4 +1,5 @@
 import os
+import time
 
 import streamlit as st
 from django.core.wsgi import get_wsgi_application
@@ -18,6 +19,7 @@ if st.session_state.log == 0:
 
 else:
     st.title("My Profile")
+    st.divider()
 
     def get_user_entity():
         current_user = st.session_state["user"]
@@ -183,6 +185,29 @@ else:
             ):
                 post_to_db(current_entity)
                 st.toast("Account successfully updated!", icon="✅")
+
+        st.divider()
+
+        st.subheader("Delete account here")
+        with st.expander("Delete account here"):
+            if (st.button("Delete Account")):
+                if ("delete_account_confirmation" not in st.session_state) or (
+                not st.session_state.delete_account_confirmation):
+                    st.session_state.delete_account_confirmation = True
+                    st.warning("""
+                            Are you sure you want to delete? 
+                            \nDeleting your account is a permanent thing, and
+                            all of your related files and data will be lost.
+
+                            \nIf you are sure, please click again to confirm. 
+                            """, icon="⚠️")
+                else:
+                    current_user.delete()
+                    st.session_state["password_correct"] = False
+                    st.session_state.log = 0
+                    st.experimental_rerun()
+
+        st.divider()
 
         st.subheader("Associated Account Details")
 
