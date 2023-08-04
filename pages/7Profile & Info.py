@@ -108,10 +108,10 @@ else:
                     )
 
                     # Set the viewport location
-                    # view_state = pdk.ViewState(latitude=37.7749295, longitude=-122.4194155, zoom=10, bearing=0, pitch=0)
+                    view_state = pdk.ViewState(latitude=float(current_user.entity.latitude), longitude=float(current_user.entity.longitude), zoom=10, bearing=0, pitch=0)
 
                     # Render
-                    r = pdk.Deck(map_style=None, layers=[layer], tooltip={"text": "{name} \n{food_items}"})
+                    r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=[layer], tooltip={"text": "{name} \n{food_items}"})
                     st.pydeck_chart(r)
 
             else:
