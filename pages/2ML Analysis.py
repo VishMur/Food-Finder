@@ -2,7 +2,7 @@ import streamlit as st
 import time
 import numpy as np
 
-st.set_page_config(page_title="ML Analysis",)
+st.set_page_config(page_title="Data and Machine Learning Analysis",)
 
 st.markdown("# Plotting Demo")
 st.sidebar.header("Plotting Demo")
