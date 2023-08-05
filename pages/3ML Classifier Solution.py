@@ -78,7 +78,7 @@ def main():
             st.write(result)
             st.pyplot(figure)
     elif page == 'Example 1':
-        image = Image.open('https://github.com/VishMur/Food-Finder/blob/39472048c8be91a33244d6eafe538d320297e147/good_orange_example.JPG')
+        image = Image.open('ml_example_images/good_orange_example.JPG')
         figure = plt.figure()
         plt.grid(False)
         plt.axis('off')
@@ -87,7 +87,7 @@ def main():
         st.write(result)
         st.pyplot(figure)
     elif page == 'Example 2':
-        image = Image.open('https://github.com/VishMur/Food-Finder/blob/39472048c8be91a33244d6eafe538d320297e147/acceptable_banana_example.jpg')
+        image = Image.open('ml_example_images/acceptable_banana_example.jpg')
         figure = plt.figure()
         plt.grid(False)
         plt.axis('off')
@@ -96,7 +96,7 @@ def main():
         st.write(result)
         st.pyplot(figure)
     elif page == 'Example 3':
-        image = Image.open('https://github.com/VishMur/Food-Finder/blob/39472048c8be91a33244d6eafe538d320297e147/bad_apple_example.JPG')
+        image = Image.open('ml_example_images/bad_apple_example.JPG')
         figure = plt.figure()
         plt.grid(False)
         plt.axis('off')
@@ -105,7 +105,7 @@ def main():
         st.write(result)
         st.pyplot(figure)
 
-weight = "https://github.com/VishMur/Food-Finder/blob/c4e65afce5f0e0c83a5a2e8aec2a11d35f40ed8a/weights.pt"
+weight = "eda_ml_notebooks/weights.pt"
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 

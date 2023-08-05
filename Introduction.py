@@ -20,44 +20,49 @@ st.markdown(
     ## Stating the Problem
     Approximately 20 billion tons, 2 billion tons, and 43 billion 
     tons of fresh produce are wasted and thrown away on farms, factories, 
-    and stores, respectively due the the fact that they appear ugly yet 
-    are perfectly edible. Minimizing this food waste could lead to the 
-    minimization of food insecurity and mollify the severity of food deserts.
-
+    and stores, respectively¹ due the the fact that they appear ugly yet 
+    are perfectly edible. Minimizing this food waste could lead to less
+    food insecurity and mollify the severity of food deserts (entire areas
+    lacking access to fresh produce due to a dearth of local stores)².
 """
 )
 
 add_vertical_space(1)
 col1, col2 = st.columns(2)
-col1.metric(label="Number of Food Deserts", value=6529)
-col2.metric(label="Percent of of U.S Population in Food Deserts", value=14.47)
+col1.metric(label="Number of Food Deserts³", value="6.5K+")
+col2.metric(label="Number of Americans in Food Deserts⁴", value="23.5M", delta="4.7M/yr", delta_color="inverse")
 
 col3, col4 = st.columns(2)
-col3.metric(label="Number of People in Food Deserts", value=23500000, delta=4700000, delta_color="inverse")
+col3.metric(label="Percent of U.S Population in Food Deserts⁴", value=7.07, delta="1.41/yr", delta_color="inverse")
+col4.metric(label="Percent of Americans in Food Insecurity⁴", value=16.26)
 style_metric_cards()
 add_vertical_space(1)
 
 st.markdown(
     """
     ## Proposed Solution
-    This is a two-pronged approach. First, an ML model will be used to detect 
-    produce that is good (regardless of whether it appears ugly or not) using 
-    image, color, shape, size, and texture data for individual produce items 
-    on farms and factories (not necessary to do this for stores because it is 
-    assumed that produce in stores is in good condition). Then, Volunteers can 
-    see on an app the amount of produce and its location to be picked up 
-    (whether it be a farm, factory, or store). The app will then direct them 
-    to nearby drop off locations in food deserts or food banks.
+    Ugly produce is a type of produce that is wasted not because of bad taste or
+    a lack of nutritiousness but because it does not meet consumers' shape or color
+    expectations⁵. While such food would not sell in stores in non-food desert areas,
+    It would be very useful to food insecure people or people living in food deserts.
+    
+    Networks of volunteers are already working to pick up wasted produce from farms 
+    and factories⁶, but they lack an application or website to quickly provide them information
+    about where to go to maximize their productivity by finding large amounts of ugly produce.
+    This is important because fresh produce tends to decay quickly, and can only be donated for so long.
+    
+    Our approach is two-pronged. First, an machine learning model will be used to detect 
+    produce that is good, ugly (acceptable), or bad using image, color, shape, size, and
+    texture data for individual produce items at producer locations (typically farms).
+    Then, volunteers can see, on this web application, producers' locations and the number
+    of batches of ugly produce they have to be picked up and donated
+    (whether it be a farm, factory, or store). The app will also show them 
+    nearby food banks delivering food to food insecure people and/or those living in food deserts.
 
-    #### Solution Architecture Levels
+    #### Solution Architecture Level Summary
     - At the level of PRODUCERS: Detect viable foods that are thrown away
-    - At the level of MIDDLEMEN: Determine volunteers and efforts to reach consumers
-    - At the level of CONSUMERS: Identify target communities 
-    
-    ### Relevant Sources
-    - [The Problem of Food Waste](https://foodprint.org/issues/the-problem-of-food-waste/)
-    - [From field to fork: the six stages of wasting food](https://amp.theguardian.com/environment/2016/jul/14/from-field-to-fork-the-six-stages-of-wasting-food)
-    
+    - At the level of MIDDLEMEN: Allow volunteers to find producers with ugly produce and consumers needing food
+    - At the level of CONSUMERS: Identify target communities for food distribution
 """
 )
 
@@ -65,16 +70,16 @@ add_vertical_space(2)
 st.markdown(
     """
     ## Sources
-    - [[1] The Problem of Food Waste](https://foodprint.org/issues/the-problem-of-food-waste/)
-    - [[2] From field to fork: the six stages of wasting food](https://amp.theguardian.com/environment/2016/jul/14/from-field-to-fork-the-six-stages-of-wasting-food)
-    - [[3] Characteristics and Influential Factors of Food Deserts](https://www.ers.usda.gov/webdocs/publications/45014/30940_err140.pdf)
-    - [[4] Food Deserts and Inequality](https://www.socialpolicylab.org/post/grow-your-blog-community)
-    - [[5] Looking for oases in America's food deserts](https://www.farmprogress.com/commentary/looking-for-oases-in-america-s-food-deserts)
-    - [[6] What Are Food Deserts and How Do We Solve Them?](https://www.edengreen.com/blog-collection/food-deserts)
-    - [[7] USDA Food Access Atlas Documentation](https://www.ers.usda.gov/data-products/food-access-research-atlas/documentation/)
-    - [From field to fork: the six stages of wasting food](https://amp.theguardian.com/environment/2016/jul/14/from-field-to-fork-the-six-stages-of-wasting-food)
-    - [From field to fork: the six stages of wasting food](https://amp.theguardian.com/environment/2016/jul/14/from-field-to-fork-the-six-stages-of-wasting-food)
-    - [From field to fork: the six stages of wasting food](https://amp.theguardian.com/environment/2016/jul/14/from-field-to-fork-the-six-stages-of-wasting-food)
-
+    1. [The Problem of Food Waste](https://foodprint.org/issues/the-problem-of-food-waste/)
+    2. [USDA Food Access Atlas Documentation](https://www.ers.usda.gov/data-products/food-access-research-atlas/documentation/)
+    3. [Understanding America’s Rural and Urban Food Deserts](https://www.bayer.com/en/us/news-stories/understanding-americas-rural-and-urban-food-deserts#:~:text=There%20are%20over%206%2C500%20food,refrigerators%20often%20look%20the%20same.)
+    4. [Food Deserts and Inequality](https://www.socialpolicylab.org/post/grow-your-blog-community)
+    5. [Seeing Beauty in Ugly Produce: A Food Waste Perspective](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4349504)
+    6. [From field to fork: the six stages of wasting food](https://amp.theguardian.com/environment/2016/jul/14/from-field-to-fork-the-six-stages-of-wasting-food)
+    Useless Stuff Below
+    . [Characteristics and Influential Factors of Food Deserts](https://www.ers.usda.gov/webdocs/publications/45014/30940_err140.pdf)
+    . [Food Deserts and Inequality](https://www.socialpolicylab.org/post/grow-your-blog-community)
+    . [Looking for oases in America's food deserts](https://www.farmprogress.com/commentary/looking-for-oases-in-america-s-food-deserts)
+    . [What Are Food Deserts and How Do We Solve Them?](https://www.edengreen.com/blog-collection/food-deserts)
 """
 )
