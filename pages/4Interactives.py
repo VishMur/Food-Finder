@@ -64,7 +64,15 @@ def bookmark_help_message():
     else:
         return "Bookmark locations for the future!"
 
+ICON_URL = "https://cdn1.iconfinder.com/data/icons/color-bold-style/21/14_2-512.png"
 
+icon_data = {
+    "url": ICON_URL,
+    "width": 242,
+    "height": 242,
+    "anchorY": 242,
+
+}
 
 data = []
 
@@ -87,6 +95,7 @@ for producer in all_producers():
         'longitude': float(entity.longitude),
         'description': producer.description,
         'food_items': all_food_str,
+        'icon_data': icon_data,
     }
 
     data.append(new_data)
@@ -94,20 +103,13 @@ for producer in all_producers():
 
 # Define a layer to display on a map
 layer = pdk.Layer(
-    "ScatterplotLayer",
-    data,
-    pickable=True,
-    opacity=0.8,
-    stroked=True,
-    filled=True,
-    get_radius=10000,
-    radius_scale=6,
-    radius_min_pixels=1,
-    radius_max_pixels=100,
-    line_width_min_pixels=1,
+    type="IconLayer",
+    data=data,
+    get_icon="icon_data",
+    get_size=3,
+    size_scale=15,
     get_position=["longitude", "latitude"],
-    get_fill_color=[255, 140, 0],
-    get_line_color=[0, 0, 0],
+    pickable=True,
 )
 
 # Set the viewport location
@@ -197,7 +199,7 @@ with st.sidebar:
             st.divider()
             count += 1
 
-view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=3, bearing=0, pitch=0)
+view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=10, bearing=0, pitch=0)
 
 r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=[layer], tooltip={"text": "{name} \n{food_items}"})
 st.pydeck_chart(r)
