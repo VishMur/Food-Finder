@@ -73,6 +73,35 @@ def main():
         result = predict_class(image)
         st.write(result)
         st.pyplot(figure)
+    elif st.button('Example 1'):
+        image = Image.open('/Users/Jaesuchun/PycharmProjects/pythonProject/good_orange_example.JPG')
+        figure = plt.figure()
+        plt.grid(False)
+        plt.axis('off')
+        plt.imshow(image)
+        result = predict_class(image)
+        st.write(result)
+        st.pyplot(figure)
+    elif st.button('Example 2'):
+        image = Image.open('/Users/Jaesuchun/PycharmProjects/pythonProject/acceptable_banana_example.jpg')
+        figure = plt.figure()
+        plt.grid(False)
+        plt.axis('off')
+        plt.imshow(image)
+        result = predict_class(image)
+        st.write(result)
+        st.pyplot(figure)
+    elif st.button('Example 3'):
+        image = Image.open('/Users/Jaesuchun/PycharmProjects/pythonProject/bad_apple_example.JPG')
+        figure = plt.figure()
+        plt.grid(False)
+        plt.axis('off')
+        plt.imshow(image)
+        result = predict_class(image)
+        st.write(result)
+        st.pyplot(figure)
+    else:
+        st.info('Upload an image!')
 
 weight = "https://github.com/VishMur/Food-Finder/blob/c4e65afce5f0e0c83a5a2e8aec2a11d35f40ed8a/weights.pt"
 
