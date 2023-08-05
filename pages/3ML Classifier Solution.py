@@ -63,17 +63,21 @@ class Net(nn.Module):
 net = Net()
 
 def main():
-    file_uploaded = st.file_uploader("Choose the file", type = ['jpg', 'png', 'jpeg'])
-    if file_uploaded is not None:
-        image = Image.open(file_uploaded)
-        figure = plt.figure()
-        plt.grid(False)
-        plt.axis('off')
-        plt.imshow(image)
-        result = predict_class(image)
-        st.write(result)
-        st.pyplot(figure)
-    elif st.button('Example 1'):
+    page_names = ('Own Data', 'Example 1', 'Example 2', 'Example 3')
+    page = st.radio('Image Examples', page_names)
+    if page == 'Own Data':
+        file_uploaded = st.file_uploader("Choose the file", type=['jpg', 'png', 'jpeg'])
+        st.info('Upload an image!')
+        if file_uploaded is not None:
+            image = Image.open(file_uploaded)
+            figure = plt.figure()
+            plt.grid(False)
+            plt.axis('off')
+            plt.imshow(image)
+            result = predict_class(image)
+            st.write(result)
+            st.pyplot(figure)
+    elif page == 'Example 1':
         image = Image.open('https://github.com/VishMur/Food-Finder/blob/39472048c8be91a33244d6eafe538d320297e147/good_orange_example.JPG')
         figure = plt.figure()
         plt.grid(False)
@@ -82,7 +86,7 @@ def main():
         result = predict_class(image)
         st.write(result)
         st.pyplot(figure)
-    elif st.button('Example 2'):
+    elif page == 'Example 2':
         image = Image.open('https://github.com/VishMur/Food-Finder/blob/39472048c8be91a33244d6eafe538d320297e147/acceptable_banana_example.jpg')
         figure = plt.figure()
         plt.grid(False)
@@ -91,7 +95,7 @@ def main():
         result = predict_class(image)
         st.write(result)
         st.pyplot(figure)
-    elif st.button('Example 3'):
+    elif page == 'Example 3':
         image = Image.open('https://github.com/VishMur/Food-Finder/blob/39472048c8be91a33244d6eafe538d320297e147/bad_apple_example.JPG')
         figure = plt.figure()
         plt.grid(False)
@@ -100,8 +104,6 @@ def main():
         result = predict_class(image)
         st.write(result)
         st.pyplot(figure)
-    else:
-        st.info('Upload an image!')
 
 weight = "https://github.com/VishMur/Food-Finder/blob/c4e65afce5f0e0c83a5a2e8aec2a11d35f40ed8a/weights.pt"
 
