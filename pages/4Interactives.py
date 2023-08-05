@@ -102,7 +102,7 @@ for producer in all_producers():
 
 
 # Define a layer to display on a map
-layer = pdk.Layer(
+data_layer = pdk.Layer(
     type="IconLayer",
     data=data,
     get_icon="icon_data",
@@ -205,8 +205,45 @@ with st.sidebar:
             st.divider()
             count += 1
 
+
 view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=10, bearing=0, pitch=0)
 
-r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=[layer], tooltip={"text": "{name} \n{food_items}"})
+
+producer_all_food = all_food_items().filter(producer=select)
+select_food_str = "Currently available foods:"
+
+for food_item in producer_all_food:
+    select_food_str += "\n- " + food_item.name + " (" + str(food_item.quantity) + ")"
+
+if producer_all_food.count() == 0:
+    select_food_str += "\n None ATM. Check back later!"
+
+selected_data = []
+select_data = {
+    'name': select.entity.user.first_name,
+    'latitude': float(select.entity.latitude),
+    'longitude': float(select.entity.longitude),
+    'description': select.description,
+    'food_items': select_food_str,
+}
+selected_data.append(select_data)
+
+selected_data_layer = pdk.Layer(
+    "ScatterplotLayer",
+    data=selected_data,
+    pickable=True,
+    opacity=0.8,
+    stroked=True,
+    filled=True,
+    radius=1000,
+    radius_scale=6,
+    radius_min_pixels=1,
+    radius_max_pixels=1000,
+    line_width_min_pixels=1,
+    get_position=["longitude", "latitude"],
+    get_fill_color=[255, 140, 0],
+)
+
+r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=[selected_data_layer, data_layer], tooltip={"text": "{name} \n{food_items}"})
 st.pydeck_chart(r)
 # st.map(data, use_container_width=False)
