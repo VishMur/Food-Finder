@@ -74,7 +74,7 @@ def main():
         st.write(result)
         st.pyplot(figure)
     elif st.button('Example 1'):
-        image = Image.open('good_orange_example.JPG')
+        image = Image.open('https://github.com/VishMur/Food-Finder/blob/39472048c8be91a33244d6eafe538d320297e147/good_orange_example.JPG')
         figure = plt.figure()
         plt.grid(False)
         plt.axis('off')
@@ -83,7 +83,7 @@ def main():
         st.write(result)
         st.pyplot(figure)
     elif st.button('Example 2'):
-        image = Image.open('acceptable_banana_example.jpg')
+        image = Image.open('https://github.com/VishMur/Food-Finder/blob/39472048c8be91a33244d6eafe538d320297e147/acceptable_banana_example.jpg')
         figure = plt.figure()
         plt.grid(False)
         plt.axis('off')
@@ -92,7 +92,7 @@ def main():
         st.write(result)
         st.pyplot(figure)
     elif st.button('Example 3'):
-        image = Image.open('bad_apple_example.JPG')
+        image = Image.open('https://github.com/VishMur/Food-Finder/blob/39472048c8be91a33244d6eafe538d320297e147/bad_apple_example.JPG')
         figure = plt.figure()
         plt.grid(False)
         plt.axis('off')
