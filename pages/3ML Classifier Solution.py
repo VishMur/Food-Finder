@@ -74,7 +74,7 @@ def main():
         st.write(result)
         st.pyplot(figure)
 
-weight = "weights.pt"
+weight = "https://github.com/VishMur/Food-Finder/blob/c4e65afce5f0e0c83a5a2e8aec2a11d35f40ed8a/weights.pt"
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
