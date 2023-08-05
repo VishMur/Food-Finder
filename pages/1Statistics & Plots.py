@@ -11,5 +11,5 @@ st.set_page_config(
 st.title("Statistics & Plots")
 st.header("Relevant Graphs")
 
-image = Image.open('img_assets/Food Insecurity in America.png')
+image = Image.open('img_assets/Stats & Plots Images/Food Insecurity in America.png')
 st.image(image, caption='USDA 2018')
