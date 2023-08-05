@@ -17,9 +17,10 @@ import itertools
 import os
 
 st.set_page_config(
-    page_title="Image Classifier",
+    page_title="Fruit Classifier",
 )
 
+st.title("Fruit Classifier")
 st.header("Image class predictor")
 
 classes = ('Acceptable_Apple', 'Acceptable_Banana', 'Acceptable_Guava', 'Acceptable_Lemon',
