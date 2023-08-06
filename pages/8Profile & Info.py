@@ -204,6 +204,7 @@ else:
                 and longitude_clean()
             ):
                 post_to_db(current_entity)
+                st.experimental_rerun()
                 st.toast("Account successfully updated!", icon="✅")
 
         st.divider()
@@ -238,8 +239,10 @@ else:
                 try:
                     if st.session_state["warning"]:
                         current_producer.delete()
+                        st.experimental_rerun()
                         st.toast("Producer account successfully deleted!", icon="✅")
                         st.session_state["warning"] = False
+
                     else:
                         st.session_state["warning"] = True
                         st.warning("Are you sure you want to delete? Click again to confirm.")
@@ -265,7 +268,9 @@ else:
                         current_producer.description = producer_description_input
                         current_producer.website = website_input
                         current_producer.save()
+                        st.experimental_rerun()
                         st.toast("Account successfully updated!", icon="✅")
+
 
 
             # for loop with 3 items in it:
@@ -341,7 +346,9 @@ else:
                                         producer=current_producer,
                                     )
                                     food_item.save()
+                                st.experimental_rerun()
                                 st.toast("Food Item successfully saved!",icon="✅")
+
                     if count >= 0:
                         with col2:
                             if(st.button("Delete food", key="delete"+str(count))):
@@ -349,9 +356,11 @@ else:
                                     if st.session_state["warning"]:
                                         food_item2 = get_food_items()[count]
                                         food_item2.delete()
+                                        st.experimental_rerun()
                                         st.toast("Food Item successfully deleted!", icon="✅")
                                         count = count - 1
                                         st.session_state["warning"] = False
+
                                     else:
                                         st.session_state["warning"] = True
                                         st.warning("Are you sure you want to delete? Click again to confirm.")
@@ -392,7 +401,9 @@ else:
                             website_link = website_input,
                             )
                             current_producer.save()
+                            st.experimental_rerun()
                             st.toast("Account successfully created!", icon="✅")
+
 
         st.divider()
 
@@ -403,8 +414,10 @@ else:
                 try:
                     if st.session_state["warning"]:
                         current_volunteer.delete()
+                        st.experimental_rerun()
                         st.toast("Volunteer account successfully deleted!", icon="✅")
                         st.session_state["warning"] = False
+
                     else:
                         st.session_state["warning"] = True
                         st.warning("Are you sure you want to delete? Click again to confirm.")
@@ -428,6 +441,7 @@ else:
                             deliveries=0
                         )
                         current_volunteer.save()
+                        st.experimental_rerun()
                         st.toast("Account successfully created!", icon="✅")
 
 
