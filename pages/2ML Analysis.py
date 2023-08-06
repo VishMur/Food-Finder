@@ -84,6 +84,24 @@ st.image("img_assets/ml analysis assets/fruit_image_grid.png")
 st.markdown("""
 This grid shows 64 sample training images that were used to develop the model described above. One thing of note is that the data splits between the training and
 testing datasets was stratified, meaning that the splits were made in a way that tried to balance the various fruit quality and type classes. This prevented the model
-from overtraining on a particular fruit type of quality, and increased its accuracy.
+from over-training on a particular fruit type of quality, and increased its accuracy.
+"""
+)
+
+# Loss by epoch
+st.image("img_assets/ml analysis assets/loss_by_epoch.png")
+st.markdown("This data shows")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.image("img_assets/ml analysis assets/loss_by_epoch.png")
+with col2:
+    st.image("img_assets/ml analysis assets/accuracy_by_epoch.png")
+
+st.markdown("""
+The graphs above show that as the model learns from examples over time (epochs), the loss (prediction errors) decreases while the prediction accuracy
+increases for both training and validation (unseen examples) datasets. These are positive signs, as they indicate that the model got better at avoiding 
+prediction errors, making accurate predictions, and handling new/unseen data.
 """
 )
