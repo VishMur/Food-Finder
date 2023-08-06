@@ -43,7 +43,7 @@ else:
             try:
                 st.session_state.title += 1
                 if st.session_state.title < 2:
-                    st.title("Chat")
+                    st.title("Group Chat")
                 else:
                     route_to_chatlist_view()
             except:
