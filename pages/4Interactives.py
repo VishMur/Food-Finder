@@ -172,6 +172,8 @@ for producer in all_producers():
 def display_producer(producer):
     global producer_all_food, food_item
     st.subheader(f"{bookmarked()} {producer.entity.user.first_name}")
+    if producer.usda_certified:
+        st.write("USDA Certified ✅")
     st.write(f"Deliveries: {producer.deliveries}")
     st.write(f":pushpin: {producer.entity.address}")
     st.write(f":earth_americas: {producer.website_link}")
