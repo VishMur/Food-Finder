@@ -57,7 +57,10 @@ def all_farm_items():
 
 
 def bookmark_button_disabled():
-    user = st.session_state["user"]
+    try:
+        user = st.session_state["user"]
+    except KeyError:
+        return True
     user_entity = all_entities().filter(user=user).first()
     volunteer = all_volunteers().filter(entity=user_entity).first()
     st.session_state["volunteer"] = volunteer
@@ -69,7 +72,7 @@ def bookmark_button_disabled():
 
 def bookmark_help_message():
     if bookmark_button_disabled():
-        return "Login or create a volunteer account to bookmark locations!"
+        return "Login and create a volunteer account to bookmark locations!"
     else:
         return "Bookmark locations for the future!"
 
@@ -272,29 +275,29 @@ with st.sidebar:
 
     bookmark_left, bookmark_right = st.columns(2)
 
-    if 'user' in st.session_state:
+    # if 'user' in st.session_state:
 
-        with bookmark_left:
-            if(st.button("Bookmark producer",
-                         disabled=bookmark_button_disabled(),
-                         help=bookmark_help_message())
-            ):
-                try:
-                    new_bookmark = ProducerBookmark.objects.create(
-                        producer=select,
-                        volunteer=st.session_state.volunteer,
-                    )
-                    new_bookmark.save()
-                    st.toast("Producer successfully bookmarked!", icon="✅")
-                    st.experimental_rerun()
-                except IntegrityError:
-                    st.error("Producer already bookmarked!")
-        with bookmark_right:
-            if(st.button("Remove bookmark", key="searchbar_remove_button")):
-                if bookmark is not None:
-                    bookmark.delete()
-                    st.toast("Bookmark successfully removed!", icon="✅")
-                    st.experimental_rerun()
+    with bookmark_left:
+        if(st.button("Bookmark producer",
+                     disabled=bookmark_button_disabled(),
+                     help=bookmark_help_message())
+        ):
+            try:
+                new_bookmark = ProducerBookmark.objects.create(
+                    producer=select,
+                    volunteer=st.session_state.volunteer,
+                )
+                new_bookmark.save()
+                st.toast("Producer successfully bookmarked!", icon="✅")
+                st.experimental_rerun()
+            except IntegrityError:
+                st.error("Producer already bookmarked!")
+    with bookmark_right:
+        if(st.button("Remove bookmark", key="searchbar_remove_button")):
+            if bookmark is not None:
+                bookmark.delete()
+                st.toast("Bookmark successfully removed!", icon="✅")
+                st.experimental_rerun()
 
     st.divider()
 
