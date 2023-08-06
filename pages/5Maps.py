@@ -388,7 +388,7 @@ else:
         with col1:
             st.image(BLUE_ICON_URL, width=50)
         with col2:
-            st.write("The blue icon displays locations of other users with whom you share a volunteering group.")
+            st.write("The blue icon displays the locations of other nearby Food Finder users/volunteers")
 
     st.markdown(""":point_left: On the left is a **sidebar** that enables you to search for a specific
              organization, location, or person, and provides you with additional
