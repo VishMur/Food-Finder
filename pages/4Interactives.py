@@ -148,8 +148,21 @@ volunteer_data_layer = pdk.Layer(
 
 # Render
 
+st.header("Interactive Map")
+st.write("""
+        Our goal: allow consumers within food deserts to access **nutritious, affordable food**.
+        
+        \nThus, we have compiled data on **local food producers**, such as food pantries and banks, along with
+        information on **nearby volunteers** in order to **empower a community** to tackle the problems of 
+        food waste and food deserts.""")
 
-col1, col2 = st.columns([1, 2])
+st.write("---")
+
+
+
+
+
+
 
 producer_options = []
 for producer in all_producers():
@@ -279,4 +292,26 @@ selected_data_layer = pdk.Layer(
 layers = [selected_data_layer, producer_data_layer, volunteer_data_layer]
 r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=layers, tooltip={"text": "{name} \n{food_items}"})
 st.pydeck_chart(r)
+
+st.write("**Welcome to our interactive map.**")
+st.markdown(""":point_up: Our map displays **location and other basic info** on nearby food producers
+          and volunteers.""")
+
+with st.container():
+    col1, col2 = st.columns([1,10])
+    with col1:
+        st.image(RED_ICON_URL, width=50)
+    with col2:
+        st.write("Our red icon displays locations of local producers.")
+with st.container():
+    col1, col2 = st.columns([1,10])
+    with col1:
+        st.image(BLUE_ICON_URL, width=50)
+    with col2:
+        st.write("Our blue icon displays the location of nearby volunteers.")
+
+st.markdown(""":point_left: On the left is a **sidebar** that enables you to search for a specific
+         organization, location, or person, and provides you with additional
+         information.""")
+
 # st.map(volunteer_data, use_container_width=False)
