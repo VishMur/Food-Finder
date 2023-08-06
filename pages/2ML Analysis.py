@@ -1,33 +1,42 @@
 import streamlit as st
 import time
 import numpy as np
+from streamlit_extras.add_vertical_space import add_vertical_space
 
 st.set_page_config(page_title="Data and Machine Learning Analysis",)
 
-st.markdown("# Plotting Demo")
-st.sidebar.header("Plotting Demo")
+st.title("Data and Machine Learning Analysis")
+st.header("Data Visualizations Analysis")
+
 st.write(
-    """This demo illustrates a combination of plotting and animation with
-Streamlit. We're generating a bunch of random numbers in a loop for around
-5 seconds. Enjoy!"""
+    """Because the data is in the form of images, it was hard to compare different classes on a graph
+       (such as, for example, a box and whisker plot showing the distribution of data). However, it was
+       possible to analyze how balanced the data classes are (how many of each type and quality of produce
+       are shown).
+"""
 )
 
-progress_bar = st.sidebar.progress(0)
-status_text = st.sidebar.empty()
-last_rows = np.random.randn(1, 1)
-chart = st.line_chart(last_rows)
+add_vertical_space(1)
 
-for i in range(1, 101):
-    new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-    status_text.text("%i%% Complete" % i)
-    chart.add_rows(new_rows)
-    progress_bar.progress(i)
-    last_rows = new_rows
-    time.sleep(0.05)
+st.image("img_assets/ml analysis assets/fruit_quality_counts.png")
+st.write(
+    """The data is overwhelmingly composed of good quality fruit, but there is
+     still enough data for the ugly (acceptable) and bad fruit classes to train a machine learning classifier to
+      distinguish between the 3 classes of fruit quality.
+"""
+)
 
-progress_bar.empty()
+st.image("img_assets/ml analysis assets/fruit_type_counts.png")
+st.write(
+    """The data is primarily made of pomegranate pictures, but there is
+      enough data from the other 5 types of fruit to distinguish between the 6 total classes of fruit type.
+"""
+)
 
-# Streamlit widgets automatically run the script from top to bottom. Since
-# this button is not connected to any other logic, it just causes a plain
-# rerun.
-st.button("Re-run")
+st.image("img_assets/ml analysis assets/fruit_quality_and_type_counts.png")
+st.write(
+    """This graph aggregates the information from the previous two graphs with both fruit type and quality. 
+       A disproportionate percentage of bananas and lemons are ugly/acceptable fruit, and a disproportionate
+      percentage of pomegranates are good fruit.
+"""
+)
