@@ -109,7 +109,7 @@ farm_data = []
 for producer in all_producers():
     entity = producer.entity
     producer_all_food = all_food_items().filter(producer=producer)
-    all_food_str = "Currently available foods:"
+    all_food_str = "Food inventory: "
 
     for farm_item in producer_all_food:
         all_food_str += "\n- " + farm_item.name + " (" + str(farm_item.quantity) + " batches)"
