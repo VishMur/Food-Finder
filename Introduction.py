@@ -120,10 +120,5 @@ st.markdown(
     4. [Food Deserts and Inequality](https://www.socialpolicylab.org/post/grow-your-blog-community)
     5. [Seeing Beauty in Ugly Produce: A Food Waste Perspective](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4349504)
     6. [From field to fork: the six stages of wasting food](https://amp.theguardian.com/environment/2016/jul/14/from-field-to-fork-the-six-stages-of-wasting-food)
-    Useless Stuff Below
-    . [Characteristics and Influential Factors of Food Deserts](https://www.ers.usda.gov/webdocs/publications/45014/30940_err140.pdf)
-    . [Food Deserts and Inequality](https://www.socialpolicylab.org/post/grow-your-blog-community)
-    . [Looking for oases in America's food deserts](https://www.farmprogress.com/commentary/looking-for-oases-in-america-s-food-deserts)
-    . [What Are Food Deserts and How Do We Solve Them?](https://www.edengreen.com/blog-collection/food-deserts)
 """
 )
