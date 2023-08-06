@@ -40,6 +40,50 @@ add_vertical_space(1)
 
 st.markdown(
     """
+    ### UN Sustainable Development Goals (SDGs)
+    These dual social problems of food deserts and food waste are related to two
+    important UN Goals:
+    """
+)
+
+st.image("https://raw.githubusercontent.com/VishMur/Food-Finder/main/img_assets/UN%20Goals%20Focus.png")
+
+st.markdown(
+    """
+    ##### Goal 2: Zero Hunger
+    - **Target 2.1:** 
+    
+    """
+)
+
+col1, col2 = st.columns([1, 30])
+
+with col2:
+    st.write("""
+    By 2030, end hunger and ensure access by all people, 
+    in particular the poor and people in vulnerable situations, 
+    including infants, to safe, nutritious and sufficient food all year round.
+    """)
+
+st.markdown("""
+
+    ##### Goal 12: Responsible Consumption and Production
+    - **Target 12.3:** 
+    
+    """
+)
+
+col1, col2 = st.columns([1, 30])
+
+with col2:
+    st.write("""
+    By 2030, halve per capita global food waste at the 
+    retail and consumer levels and reduce food losses along
+    production and supply chains, including post-harvest losses.
+    """)
+
+st.markdown(
+    """
     ## Proposed Solution
     Ugly produce is a type of produce that is wasted not because of bad taste or
     a lack of nutritiousness but because it does not meet consumers' shape or color
