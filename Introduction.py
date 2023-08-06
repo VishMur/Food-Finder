@@ -105,8 +105,8 @@ st.markdown(
 
     #### Solution Architecture Level Summary
     - At the level of PRODUCERS: Detect viable foods that are thrown away
-    - At the level of MIDDLEMEN: Allow volunteers to find producers with ugly produce and consumers needing food
-    - At the level of CONSUMERS: Identify target communities for food distribution
+    - At the level of MIDDLEMEN: Allow volunteers to find producers with ugly produce and distributors needing food
+    - At the level of DISTRIBUTORS: Allow Food Banks to Receive Food Quickly
 """
 )
 
