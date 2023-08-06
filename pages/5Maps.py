@@ -376,19 +376,19 @@ else:
         with col1:
             st.image(YELLOW_ICON_URL, width=50)
         with col2:
-            st.write("Our red icon displays locations of local producers.")
+            st.write("Thr red icon displays locations of local producers.")
     with st.container():
         col1, col2 = st.columns([1,10])
         with col1:
             st.image(RED_ICON_URL, width=50)
         with col2:
-            st.write("Our yellow icon displays the location of local distributors.")
+            st.write("The yellow icon displays the location of local distributors.")
     with st.container():
         col1, col2 = st.columns([1,10])
         with col1:
             st.image(BLUE_ICON_URL, width=50)
         with col2:
-            st.write("Our blue icon displays the location of nearby volunteers.")
+            st.write("The blue icon displays locations of other users with whom you share a volunteering group.")
 
     st.markdown(""":point_left: On the left is a **sidebar** that enables you to search for a specific
              organization, location, or person, and provides you with additional
