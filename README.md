@@ -3,3 +3,6 @@ A project with data science to explain the food desert and wastage crisis, Machi
 
 # Deployed Solution
 https://food-finder.streamlit.app/
+
+# Fruit Quality Classification Dataset
+https://www.kaggle.com/datasets/ryandpark/fruit-quality-classification
