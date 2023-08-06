@@ -105,6 +105,11 @@ else:
                             with col7:
                                 st.write("")
                             st.write(message["content"])
+        try:
+            st.chat_input(placeholder="Demo account \"TestUser\" restricts sending messages.", disabled=True,
+                          key=random.randrange(100000))
+        except:
+            pass
 
     def route_to_chatlist_view():
         st.session_state.to_chat = ""
