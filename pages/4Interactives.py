@@ -64,17 +64,27 @@ def bookmark_help_message():
     else:
         return "Bookmark locations for the future!"
 
-ICON_URL = "https://cdn1.iconfinder.com/data/icons/color-bold-style/21/14_2-512.png"
+RED_ICON_URL = "https://cdn1.iconfinder.com/data/icons/color-bold-style/21/14_2-512.png"
+BLUE_ICON_URL = "https://cdn3.iconfinder.com/data/icons/flat-pro-basic-set-1-1/32/location-blue-512.png"
 
-icon_data = {
-    "url": ICON_URL,
+red_icon_data = {
+    "url": RED_ICON_URL,
     "width": 242,
     "height": 242,
     "anchorY": 242,
 
 }
 
-data = []
+blue_icon_data = {
+    "url": BLUE_ICON_URL,
+    "width": 242,
+    "height": 242,
+    "anchorY": 242,
+
+}
+
+producer_data = []
+volunteer_data = []
 
 
 for producer in all_producers():
@@ -95,17 +105,39 @@ for producer in all_producers():
         'longitude': float(entity.longitude),
         'description': producer.description,
         'food_items': all_food_str,
-        'icon_data': icon_data,
+        'red_icon_data': red_icon_data,
     }
 
-    data.append(new_data)
+    producer_data.append(new_data)
 
+for volunteer in all_volunteers():
+    new_data = {
+        'name':volunteer.entity.user.first_name,
+        'latitude': float(volunteer.entity.latitude),
+        'longitude': float(volunteer.entity.longitude),
+        'food_items': volunteer.entity.user.email,
+        'deliveries': volunteer.deliveries,
+        'blue_icon_data': blue_icon_data,
+    }
+
+    volunteer_data.append(new_data)
 
 # Define a layer to display on a map
-data_layer = pdk.Layer(
+producer_data_layer = pdk.Layer(
     type="IconLayer",
-    data=data,
-    get_icon="icon_data",
+    data=producer_data,
+    get_icon="red_icon_data",
+    get_size=3,
+    size_scale=15,
+    get_position=["longitude", "latitude"],
+    pickable=True,
+)
+
+
+volunteer_data_layer = pdk.Layer(
+    type="IconLayer",
+    data=volunteer_data,
+    get_icon="blue_icon_data",
     get_size=3,
     size_scale=15,
     get_position=["longitude", "latitude"],
@@ -244,6 +276,7 @@ selected_data_layer = pdk.Layer(
     get_fill_color=[255, 140, 0],
 )
 
-r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=[selected_data_layer, data_layer], tooltip={"text": "{name} \n{food_items}"})
+layers = [selected_data_layer, producer_data_layer, volunteer_data_layer]
+r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=layers, tooltip={"text": "{name} \n{food_items}"})
 st.pydeck_chart(r)
-# st.map(data, use_container_width=False)
+# st.map(volunteer_data, use_container_width=False)
