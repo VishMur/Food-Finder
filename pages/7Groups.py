@@ -43,7 +43,7 @@ else:
             try:
                 st.session_state.title += 1
                 if st.session_state.title < 2:
-                    st.title("Group Chat")
+                    st.title("Chat")
                 else:
                     route_to_chatlist_view()
             except:
@@ -56,10 +56,13 @@ else:
             add_vertical_space(2)
             st.button("Go Back to Chat List", on_click=route_to_chatlist_view, key="key_16")
 
-        messages_collection = db.collection("messages")
-        st.session_state.chat_messages = []
+        gc_messages_collection = db.collection("group_chats")
+        st.session_state.gc_chat_messages = []
 
-        for document in messages_collection.stream():
+        for doc in gc_messages_collection.stream():
+            st.write("hi")
+            st.write(doc.to_dict())
+            st.write(gc_messages_collection.document(doc))
             st.session_state.chat_messages.append({"role": "user", "fromId": document.get("from"), "toId": document.get("to"),
                                               "content": document.get("msg")})
         st.session_state.chat_messages.reverse()
