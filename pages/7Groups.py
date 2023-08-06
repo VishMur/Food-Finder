@@ -114,33 +114,35 @@ else:
     if st.session_state.num == 1:
         st.title("Groups")
 
-        users_collection = db.collection("user")
-        st.session_state.users = []
+        gc_collection = db.collection("group_chats")
+        st.session_state.grchats = []
 
-        for document in users_collection.stream():
-            st.session_state.users.append({"role": "user", "name": document.get("name"),
-                                           "profile_img": document.get("profile_img"),
-                                           "join_date": document.get("join_date"),
-                                           "user_type": document.get("user_type"),})
-        for user in st.session_state.users:
-            if user["name"] != this_user:
-                with st.chat_message(user["role"], avatar="🗞"):
+        for document in gc_collection.stream():
+            st.session_state.grchats.append({"role": "user",
+                                             "gc_name": document.get("group_name"),
+                                           "group_img": document.get("group_img"),
+                                           "names": document.get("names"),
+                                           "date": document.get("creation_date"),})
+        for chat in st.session_state.grchats:
+            if  this_user in chat["names"]:
+                with st.chat_message(chat["role"], avatar="🗞"):
                     col1, col2, col3, col4 = st.columns(4)
 
                     with col1:
-                        st.image(get_image(user["profile_img"]), width=100)
+                        st.image(get_image(chat["group_img"]), width=140)
 
                     with col2:
-                        st.header(user["name"])
-                        st.write(user["user_type"])
+                        st.subheader(chat["gc_name"])
+                        st.write(chat["names"])
 
                     with col3:
                         st.write("")
+
                     with col4:
                         add_vertical_space(1)
-                        st.button("Enter Chat", key=user["name"], on_click=route_to_chat_view, args=[user["name"]])
-
-                        st.write(user["join_date"])
+                        st.button("Enter Chat", key=chat["gc_name"], on_click=route_to_chat_view, args=[chat["gc_name"]])
+                        add_vertical_space(2)
+                        st.write(chat["date"])
     elif st.session_state.num == 2:
         try:
             route_to_chat_view(st.session_state.to_chat)
