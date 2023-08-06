@@ -203,8 +203,8 @@ st.header("Interactive Map")
 st.write("""
         Our goal: allow consumers within food deserts to access **nutritious, affordable food**.
         
-        \nThus, we have compiled data on **local food producers**, such as food pantries and banks, along with
-        information on **nearby volunteers** in order to **empower a community** to tackle the problems of 
+        \nThus, we have compiled data on **local food producers and distributors**, such as farms and food banks,
+        along with information on **nearby volunteers** in order to **empower a community** to tackle the problems of 
         food waste and food deserts.""")
 
 st.write("---")
