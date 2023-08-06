@@ -75,6 +75,7 @@ def bookmark_help_message():
 
 RED_ICON_URL = "https://cdn1.iconfinder.com/data/icons/color-bold-style/21/14_2-512.png"
 BLUE_ICON_URL = "https://cdn3.iconfinder.com/data/icons/flat-pro-basic-set-1-1/32/location-blue-512.png"
+YELLOW_ICON_URL = "https://static.wixstatic.com/media/ff98d3_9d69110a4e7c4c1993dcfded0138173e~mv2.png/v1/fill/w_632,h_992,al_c,q_90,usm_0.66_1.00_0.01,enc_auto/location-01-01-01.png"
 
 red_icon_data = {
     "url": RED_ICON_URL,
@@ -92,8 +93,17 @@ blue_icon_data = {
 
 }
 
+yellow_icon_data = {
+    "url": YELLOW_ICON_URL,
+    "width": 162,
+    "height": 242,
+    "anchorY": 242,
+
+}
+
 producer_data = []
 volunteer_data = []
+farm_data = []
 
 
 for producer in all_producers():
@@ -101,8 +111,8 @@ for producer in all_producers():
     producer_all_food = all_food_items().filter(producer=producer)
     all_food_str = "Currently available foods:"
 
-    for food_item in producer_all_food:
-        all_food_str += "\n- " + food_item.name + " (" + str(food_item.quantity) + ")"
+    for farm_item in producer_all_food:
+        all_food_str += "\n- " + farm_item.name + " (" + str(farm_item.quantity) + ")"
 
     if producer_all_food.count() == 0:
         all_food_str += "\n None ATM. Check back later!"
@@ -118,6 +128,29 @@ for producer in all_producers():
     }
 
     producer_data.append(new_data)
+
+for farm in all_farms():
+    entity = farm.entity
+    farm_all_food = all_farm_items().filter(farm=farm)
+    all_food_str = "Currently available foods:"
+
+    for farm_item in farm_all_food:
+        all_food_str += "\n- " + farm_item.name + " (" + str(farm_item.quantity) + ")"
+
+    if farm_all_food.count() == 0:
+        all_food_str += "\n None ATM. Check back later!"
+
+
+    new_data = {
+        'name': entity.user.first_name,
+        'latitude': float(entity.latitude),
+        'longitude': float(entity.longitude),
+        'description': farm.description,
+        'food_items': all_food_str,
+        'yellow_icon_data': yellow_icon_data,
+    }
+
+    farm_data.append(new_data)
 
 for volunteer in all_volunteers():
     new_data = {
@@ -142,6 +175,15 @@ producer_data_layer = pdk.Layer(
     pickable=True,
 )
 
+farm_data_layer = pdk.Layer(
+    type="IconLayer",
+    data=farm_data,
+    get_icon="yellow_icon_data",
+    get_size=3,
+    size_scale=15,
+    get_position=["longitude", "latitude"],
+    pickable=True,
+)
 
 volunteer_data_layer = pdk.Layer(
     type="IconLayer",
@@ -183,7 +225,7 @@ for farm in all_farms():
 
 
 def display_producer(producer):
-    global producer_all_food, food_item
+    global producer_all_food, farm_item
     st.subheader(f"{bookmarked()} {producer.entity.user.first_name}")
     if producer.usda_certified:
         st.write("USDA Certified ✅")
@@ -194,14 +236,20 @@ def display_producer(producer):
     st.caption(f":round_pushpin: {producer.entity.latitude}, {producer.entity.longitude}")
     with st.expander("See description"):
         st.write(producer.description)
-    with st.expander("See inventory"):
-        producer_all_food = all_food_items().filter(producer=producer)
-        for food_item in producer_all_food:
-            st.markdown(f"{food_item.name} ({food_item.quantity})")
-
+    try:
+        with st.expander("See inventory"):
+            producer_all_food = all_food_items().filter(producer=producer)
+            for farm_item in producer_all_food:
+                st.markdown(f"{farm_item.name} ({farm_item.quantity})")
+    except ValueError:
+        with st.expander("See inventory"):
+            farm_all_food = all_farm_items().filter(farm=producer)
+            for farm_item in farm_all_food:
+                st.markdown(f"{farm_item.name} ({farm_item.quantity})")
 
 with st.sidebar:
-    select = st.selectbox("**Select or search for a producer:**", producer_options)
+    select_options = producer_options + farm_options
+    select = st.selectbox("**Select or search for a producer or distributor:**", select_options)
 
     try:
         user_entity = all_entities().filter(user=st.session_state.user).first()
@@ -209,9 +257,10 @@ with st.sidebar:
         first_user = User.objects.all().first()
         user_entity = all_entities().filter(user=first_user).first()
     volunteer = all_volunteers().filter(entity=user_entity).first()
-
-    bookmark = ProducerBookmark.objects.all().filter(producer=select, volunteer=volunteer).first()
-
+    try:
+        bookmark = ProducerBookmark.objects.all().filter(producer=select, volunteer=volunteer).first()
+    except ValueError:
+        bookmark = FarmBookmark.objects.all().filter(farm=select, volunteer=volunteer).first()
     def bookmarked():
         if bookmark is None:
             return ""
@@ -268,12 +317,14 @@ with st.sidebar:
 
 view_state = pdk.ViewState(latitude=float(select.entity.latitude), longitude=float(select.entity.longitude), zoom=10, bearing=0, pitch=0)
 
-
-producer_all_food = all_food_items().filter(producer=select)
+try:
+    producer_all_food = all_food_items().filter(producer=select)
+except ValueError:
+    producer_all_food = all_farm_items().filter(farm=select)
 select_food_str = "Currently available foods:"
 
-for food_item in producer_all_food:
-    select_food_str += "\n- " + food_item.name + " (" + str(food_item.quantity) + ")"
+for farm_item in producer_all_food:
+    select_food_str += "\n- " + farm_item.name + " (" + str(farm_item.quantity) + ")"
 
 if producer_all_food.count() == 0:
     select_food_str += "\n None ATM. Check back later!"
@@ -304,7 +355,7 @@ selected_data_layer = pdk.Layer(
     get_fill_color=[255, 140, 0],
 )
 
-layers = [selected_data_layer, producer_data_layer, volunteer_data_layer]
+layers = [selected_data_layer, producer_data_layer, volunteer_data_layer, farm_data_layer]
 r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=layers, tooltip={"text": "{name} \n{food_items}"})
 st.pydeck_chart(r)
 
