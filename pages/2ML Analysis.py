@@ -6,6 +6,15 @@ from streamlit_extras.add_vertical_space import add_vertical_space
 st.set_page_config(page_title="Data and Machine Learning Analysis",)
 
 st.title("Data and Machine Learning Analysis")
+st.markdown("This page contains information about the data used and the machine learning model the Food Finder development team made to classify it.")
+st.markdown("""     
+       The model was 95.76% accurate at classifying produce (fruit) into the following categories: 
+       - fruit quality: good, acceptable/ugly, bad
+       - fruit type: apple, banana, guava, orange, lemon, pomegranate
+"""
+)
+add_vertical_space(1)
+
 st.header("Data Visualizations Analysis")
 
 st.write(
@@ -25,6 +34,7 @@ st.write(
       distinguish between the 3 classes of fruit quality.
 """
 )
+add_vertical_space(1)
 
 st.image("img_assets/ml analysis assets/fruit_type_counts.png")
 st.write(
@@ -32,6 +42,7 @@ st.write(
       enough data from the other 5 types of fruit to distinguish between the 6 total classes of fruit type.
 """
 )
+add_vertical_space(1)
 
 st.image("img_assets/ml analysis assets/fruit_quality_and_type_counts.png")
 st.write(
@@ -78,15 +89,17 @@ st.markdown(
          - It takes all the information gathered and predicts which category the image belongs to (1 of the 18 categroies mentioned above)
 """
 )
+add_vertical_space(1)
 
 # Image (Training Data) Picture - explain how split_folder library stratifies data split
 st.image("img_assets/ml analysis assets/fruit_image_grid.png")
 st.markdown("""
-This grid shows 64 sample training images that were used to develop the model described above. One thing of note is that the data splits between the training and
-testing datasets was stratified, meaning that the splits were made in a way that tried to balance the various fruit quality and type classes. This prevented the model
-from over-training on a particular fruit type of quality, and increased its accuracy.
+This grid shows 64 sample training images that were used to develop the model described above. 
+- Data splits between the training and testing datasets were stratified (splits were made in a way that tried to balance the various fruit quality and
+type classes). This prevented the model from over-training on a particular fruit type of quality, and increased its accuracy.
 """
 )
+add_vertical_space(1)
 
 col1, col2 = st.columns(2)
 
@@ -97,7 +110,21 @@ with col2:
 
 st.markdown("""
 The graphs above show that as the model learns from examples over time (epochs), the loss (prediction errors) decreases while the prediction accuracy
-increases for both training and validation (unseen examples) datasets. These are positive signs, as they indicate that the model got better at avoiding 
-prediction errors, making accurate predictions, and handling new/unseen data.
+increases for both training and validation (unseen examples used to finetune the model) datasets. 
+
+- Positive signs: These indicators show that the model got better at avoiding prediction errors, making accurate predictions, and handling
+new/unseen data.
+"""
+)
+add_vertical_space(1)
+
+st.image("img_assets/ml analysis assets/confusion_matrix.png")
+st.markdown("""
+This confusion matrix provides a holistic view of the performance of the model on the test data by visualizing which categories the model is good
+at and which ones it struggles with classifying. 
+
+- The diagonal from the top left of the picture to the bottom right is almost universally shaded dark blue
+    - The model classified the 18 of the image correctly, for the most part. The two categories it struggled with the most were the acceptable guavas
+    and acceptable lemons, achieving a 71 and 76 percent accuracy on classifying them, respectively.
 """
 )
