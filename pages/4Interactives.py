@@ -19,7 +19,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_settings.settings")
 
 application = get_wsgi_application()
 
-from django_api.models import Entity, Producer, FoodItem, Volunteer, ProducerBookmark
+from django_api.models import Entity, Producer, FoodItem, Volunteer, ProducerBookmark, Farm, FarmItem, FarmBookmark
 from django.contrib.auth.models import User
 
 from streamlit_extras.add_vertical_space import add_vertical_space
@@ -46,6 +46,15 @@ def all_producers():
 @st.cache_data
 def all_food_items():
     return FoodItem.objects.all()
+
+@st.cache_data
+def all_farms():
+    return Farm.objects.all()
+
+@st.cache_data
+def all_farm_items():
+    return FarmItem.objects.all()
+
 
 def bookmark_button_disabled():
     user = st.session_state["user"]
@@ -167,6 +176,10 @@ st.write("---")
 producer_options = []
 for producer in all_producers():
     producer_options.append(producer)
+
+farm_options = []
+for farm in all_farms():
+    farm_options.append(farm)
 
 
 def display_producer(producer):

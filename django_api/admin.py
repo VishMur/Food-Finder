@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FoodItem, FoodType, Entity, Producer, Volunteer, ProducerBookmark
+from .models import FoodItem, FoodType, Entity, Producer, Volunteer, ProducerBookmark, Farm, FarmItem
 
 # Register your models here.
 
@@ -10,6 +10,9 @@ models_to_register = [
     Producer,
     Volunteer,
     ProducerBookmark,
+    Farm,
+    FarmItem,
+    
 
 ]
 
