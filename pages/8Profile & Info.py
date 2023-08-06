@@ -21,6 +21,15 @@ else:
     st.title("My Profile")
     st.divider()
 
+    RED_ICON_URL = "https://cdn1.iconfinder.com/data/icons/color-bold-style/21/14_2-512.png"
+    red_icon_data = {
+        "url": RED_ICON_URL,
+        "width": 242,
+        "height": 242,
+        "anchorY": 242,
+
+    }
+
     def get_user_entity():
         current_user = st.session_state["user"]
         entity = Entity.objects.all().filter(user=current_user).first()
@@ -86,6 +95,7 @@ else:
                         'longitude': float(get_user_entity().longitude),
                         'description': get_producer().description,
                         'food_items': all_food_str,
+                        'red_icon_data': red_icon_data,
                     }
 
                     data.append(new_data)
@@ -97,7 +107,7 @@ else:
                         opacity=0.8,
                         stroked=True,
                         filled=True,
-                        get_radius=10000,
+                        get_radius=10,
                         radius_scale=6,
                         radius_min_pixels=1,
                         radius_max_pixels=100,
@@ -107,11 +117,21 @@ else:
                         get_line_color=[0, 0, 0],
                     )
 
+                    self_data_layer = pdk.Layer(
+                        type="IconLayer",
+                        data=data,
+                        get_icon="red_icon_data",
+                        get_size=3,
+                        size_scale=15,
+                        get_position=["longitude", "latitude"],
+                        pickable=True,
+                    )
+
                     # Set the viewport location
-                    view_state = pdk.ViewState(latitude=float(current_user.entity.latitude), longitude=float(current_user.entity.longitude), zoom=10, bearing=0, pitch=0)
+                    view_state = pdk.ViewState(latitude=float(current_user.entity.latitude), longitude=float(current_user.entity.longitude), zoom=15, bearing=0, pitch=0)
 
                     # Render
-                    r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=[layer], tooltip={"text": "{name} \n{food_items}"})
+                    r = pdk.Deck(map_style=None, initial_view_state=view_state, layers=[self_data_layer], tooltip={"text": "{name} \n{food_items}"})
                     st.pydeck_chart(r)
 
             else:
