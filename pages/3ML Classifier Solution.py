@@ -22,6 +22,11 @@ st.set_page_config(
 
 st.title("Fruit Classifier")
 st.header("Image class predictor")
+st.write(
+    """This classifier will attempt to identify the fruit and the quality with high accuracy.
+     Click on one of the three example files to see the classifier in action, or upload your own
+     image (in JPG, PNG, or JPEG form). Enjoy!"""
+)
 
 classes = ('Acceptable_Apple', 'Acceptable_Banana', 'Acceptable_Guava', 'Acceptable_Lemon',
            'Acceptable_Orange', 'Acceptable_Pomegranate', 'Bad_Apple', 'Bad_Banana', 'Bad_Guava',
