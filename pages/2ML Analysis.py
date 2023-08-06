@@ -88,10 +88,6 @@ from over-training on a particular fruit type of quality, and increased its accu
 """
 )
 
-# Loss by epoch
-st.image("img_assets/ml analysis assets/loss_by_epoch.png")
-st.markdown("This data shows")
-
 col1, col2 = st.columns(2)
 
 with col1:
