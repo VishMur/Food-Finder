@@ -62,19 +62,19 @@ else:
         for doc in gc_messages_collection.stream():
             st.write("hi")
             for subdoc in doc.reference.collection("messages").stream():
-                st.session_state.gc_chat_messages.append({"name": subdoc.get("name"),
+                st.session_state.gc_chat_messages.append({"name": subdoc.get("sender"),
                                                   "content": subdoc.get("msg")})
         st.session_state.gc_chat_messages.reverse()
         for message in st.session_state.gc_chat_messages:
             st.write(message)
-        #     col1, col2 = st.columns(2)
-        #     get_img1 = ""
-        #     get_img2 = ""
-        #     for user in st.session_state.users:
-        #         if user["name"] == word:
-        #             get_img1 = user["profile_img"]
-        #         elif user["name"] == this_user:
-        #             get_img2 = user["profile_img"]
+            col1, col2 = st.columns(2)
+            get_img1 = ""
+            get_img2 = ""
+            for user in st.session_state.gc_chat_messages:
+                if user["name"] == word:
+                    get_img1 = user["profile_img"]
+                elif user["name"] == this_user:
+                    get_img2 = user["profile_img"]
         #
         #
         #     if (message["fromId"] == this_user and message["toId"] == word) or (message["fromId"] == word and message["toId"] == this_user):
