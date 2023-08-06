@@ -372,7 +372,7 @@ with st.container():
     with col1:
         st.image(YELLOW_ICON_URL, width=50)
     with col2:
-        st.write("Thr red icon displays locations of local producers.")
+        st.write("The red icon displays locations of local producers.")
 with st.container():
     col1, col2 = st.columns([1,10])
     with col1:
