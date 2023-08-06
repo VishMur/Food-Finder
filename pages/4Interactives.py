@@ -112,7 +112,7 @@ for producer in all_producers():
     all_food_str = "Currently available foods:"
 
     for farm_item in producer_all_food:
-        all_food_str += "\n- " + farm_item.name + " (" + str(farm_item.quantity) + ")"
+        all_food_str += "\n- " + farm_item.name + " (" + str(farm_item.quantity) + " batches)"
 
     if producer_all_food.count() == 0:
         all_food_str += "\n None ATM. Check back later!"
@@ -135,7 +135,7 @@ for farm in all_farms():
     all_food_str = "Currently available foods:"
 
     for farm_item in farm_all_food:
-        all_food_str += "\n- " + farm_item.name + " (" + str(farm_item.quantity) + ")"
+        all_food_str += "\n- " + farm_item.name + " (" + str(farm_item.quantity) + " batches)"
 
     if farm_all_food.count() == 0:
         all_food_str += "\n None ATM. Check back later!"
@@ -236,16 +236,16 @@ def display_producer(producer):
     st.caption(f":round_pushpin: {producer.entity.latitude}, {producer.entity.longitude}")
     with st.expander("See description"):
         st.write(producer.description)
-    try:
+    if isinstance(producer, Producer):
         with st.expander("See inventory"):
             producer_all_food = all_food_items().filter(producer=producer)
             for farm_item in producer_all_food:
-                st.markdown(f"{farm_item.name} ({farm_item.quantity})")
-    except ValueError:
+                st.markdown(f"{farm_item.name} ({farm_item.quantity} batches)")
+    else:
         with st.expander("See inventory"):
             farm_all_food = all_farm_items().filter(farm=producer)
             for farm_item in farm_all_food:
-                st.markdown(f"{farm_item.name} ({farm_item.quantity})")
+                st.markdown(f"{farm_item.name} ({farm_item.quantity} batches)")
 
 with st.sidebar:
     select_options = producer_options + farm_options
