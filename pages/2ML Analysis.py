@@ -12,7 +12,7 @@ st.write(
     """Because the data is in the form of images, it was hard to compare different classes on a graph
        (such as, for example, a box and whisker plot showing the distribution of data). However, it was
        possible to analyze how balanced the data classes are (how many of each type and quality of produce
-       are shown).
+       are present in the data).
 """
 )
 
@@ -57,7 +57,7 @@ st.markdown(
     It's designed to recognize and categorize the 18 categories of images (6 types of fruit X 3 qualities of fruit).
     The following list shows the model components in order of how data is passed through it:
     
-    1. Convolutional Layers. 
+    1. Convolutional Layers
          - These layers are like filters that help the model see important features in the images
          - They highlight specific shapes or colors
          - 2 Convolutional layers are present 
@@ -80,3 +80,10 @@ st.markdown(
 )
 
 # Image (Training Data) Picture - explain how split_folder library stratifies data split
+st.image("img_assets/ml analysis assets/fruit_image_grid.png")
+st.markdown("""
+This grid shows 64 sample training images that were used to develop the model described above. One thing of note is that the data splits between the training and
+testing datasets was stratified, meaning that the splits were made in a way that tried to balance the various fruit quality and type classes. This prevented the model
+from overtraining on a particular fruit type of quality, and increased its accuracy.
+"""
+)
