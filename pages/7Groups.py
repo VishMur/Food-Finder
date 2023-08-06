@@ -58,50 +58,56 @@ else:
 
         gc_messages_collection = db.collection("group_chats")
         st.session_state.gc_chat_messages = []
-        for i in range(1000):
-            st.session_state.gc_chat_messages.append("")
 
-        for doc in gc_messages_collection.stream():
-            for subdoc in doc.reference.collection("messages").stream():
-                st.session_state.gc_chat_messages[subdoc.get("id") - 1] = (
-                                                         {"role": "user",
-                                                          "name": subdoc.get("sender"),
-                                                          "content": subdoc.get("msg"),
-                                                          "ord": subdoc.get("id")})
+        with st.spinner("Loading Chats..."):
+            for i in range(1000):
+                st.session_state.gc_chat_messages.append("")
 
-        for message in st.session_state.gc_chat_messages:
-            if message != "":
-                col1, col2 = st.columns(2)
-                if message["name"] != this_user:
-                    with col1:
-                        with st.chat_message(message["role"], avatar="📄"):
-                            col3, col4, col5, col6, col7 = st.columns(5)
-                            with col3:
-                                st.subheader(message["name"])
-                            with col4:
-                                st.write("")
-                            with col5:
-                                st.write("")
-                            with col6:
-                                st.write("")
-                            with col7:
-                                st.write("")
-                            st.write(message["content"])
-                else:
-                    with col2:
-                        with st.chat_message(message["role"], avatar="📄"):
-                            col3, col4, col5, col6, col7 = st.columns(5)
-                            with col3:
-                                st.subheader(message["name"])
-                            with col4:
-                                st.write("")
-                            with col5:
-                                st.write("")
-                            with col6:
-                                st.write("")
-                            with col7:
-                                st.write("")
-                            st.write(message["content"])
+            for doc in gc_messages_collection.stream():
+                for subdoc in doc.reference.collection("messages").stream():
+                    st.session_state.gc_chat_messages[subdoc.get("id") - 1] = (
+                                                             {"role": "user",
+                                                              "name": subdoc.get("sender"),
+                                                              "content": subdoc.get("msg"),
+                                                              "ord": subdoc.get("id")})
+
+            for message in st.session_state.gc_chat_messages:
+                if message != "":
+                    col1, col2 = st.columns(2)
+                    if message["name"] != this_user:
+                        with col1:
+                            with st.chat_message(message["role"], avatar="📄"):
+                                col3, col4, col5, col6, col7 = st.columns(5)
+                                with col3:
+                                    st.subheader(message["name"])
+                                with col4:
+                                    st.write("")
+                                with col5:
+                                    st.write("")
+                                with col6:
+                                    st.write("")
+                                with col7:
+                                    st.write("")
+                                st.write(message["content"])
+                    else:
+                        with col2:
+                            with st.chat_message(message["role"], avatar="📄"):
+                                col3, col4, col5, col6, col7 = st.columns(5)
+                                with col3:
+                                    st.subheader(message["name"])
+                                with col4:
+                                    st.write("")
+                                with col5:
+                                    st.write("")
+                                with col6:
+                                    st.write("")
+                                with col7:
+                                    st.write("")
+                                st.write(message["content"])
+                try:
+                    st.chat_input(placeholder="Demo account \"TestUser\" restricts sending messages.", disabled=True, key=random.randrange(100000))
+                except:
+                    pass
 
     def route_to_chatlist_view():
         st.session_state.to_chat = ""
