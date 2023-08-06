@@ -61,8 +61,7 @@ else:
 
         for doc in gc_messages_collection.stream():
             st.write("hi")
-            st.write(doc.to_dict())
-            st.write(gc_messages_collection.document(doc))
+            print(doc)
             st.session_state.chat_messages.append({"role": "user", "fromId": document.get("from"), "toId": document.get("to"),
                                               "content": document.get("msg")})
         st.session_state.chat_messages.reverse()
