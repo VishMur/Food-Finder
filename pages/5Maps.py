@@ -376,13 +376,13 @@ else:
         with col1:
             st.image(YELLOW_ICON_URL, width=50)
         with col2:
-            st.write("Thr red icon displays locations of local producers.")
+            st.write("The yellow icon displays locations of local producers.")
     with st.container():
         col1, col2 = st.columns([1,10])
         with col1:
             st.image(RED_ICON_URL, width=50)
         with col2:
-            st.write("The yellow icon displays the location of local distributors.")
+            st.write("The red icon displays the location of local produce distributors.")
     with st.container():
         col1, col2 = st.columns([1,10])
         with col1:
