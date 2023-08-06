@@ -20,6 +20,8 @@ from django.core.validators import validate_email
 
 if st.session_state.log == 0:
     # Create an empty container
+    st.write("For demonstration purposes use login \"ucacopperview\" and password \"testing321\" to log into "
+             "the \"TestUser\" account.")
     placeholder = st.empty()
 
     actual_email = "test@gmail.com"
@@ -100,9 +102,9 @@ if st.session_state.log == 0:
     if check_password():
         st.success("You are now logged in!", icon="✅")
 
-    add_vertical_space(2)
+    add_vertical_space(1)
     st.markdown("<h4 style='text-align: center; color: black;'>or", unsafe_allow_html=True)
-    add_vertical_space(2)
+    add_vertical_space(1)
 
     placeholder2 = st.empty()
 
