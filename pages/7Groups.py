@@ -61,52 +61,53 @@ else:
 
         for doc in gc_messages_collection.stream():
             st.write("hi")
-            print(doc)
-            st.session_state.chat_messages.append({"role": "user", "fromId": document.get("from"), "toId": document.get("to"),
-                                              "content": document.get("msg")})
-        st.session_state.chat_messages.reverse()
-        for message in st.session_state.chat_messages:
-            col1, col2 = st.columns(2)
-            get_img1 = ""
-            get_img2 = ""
-            for user in st.session_state.users:
-                if user["name"] == word:
-                    get_img1 = user["profile_img"]
-                elif user["name"] == this_user:
-                    get_img2 = user["profile_img"]
-
-
-            if (message["fromId"] == this_user and message["toId"] == word) or (message["fromId"] == word and message["toId"] == this_user):
-                if message["fromId"] != this_user:
-                    with col1:
-                        with st.chat_message(message["role"], avatar="📄"):
-                            col3, col4, col5, col6, col7 = st.columns(5)
-                            with col3:
-                                st.image(get_image(get_img1), width=40)
-                            with col4:
-                                st.subheader(message["fromId"])
-                            with col5:
-                                st.write("")
-                            with col6:
-                                st.write("")
-                            with col7:
-                                st.write("")
-                            st.write(message["content"])
-                else:
-                    with col2:
-                        with st.chat_message(message["role"], avatar="📄"):
-                            col3, col4, col5, col6, col7 = st.columns(5)
-                            with col3:
-                                st.image(get_image(get_img2), width=40)
-                            with col4:
-                                st.subheader(message["fromId"])
-                            with col5:
-                                st.write("")
-                            with col6:
-                                st.write("")
-                            with col7:
-                                st.write("")
-                            st.write(message["content"])
+            for subdoc in doc.reference.collection("messages").stream():
+                st.session_state.gc_chat_messages.append({"name": subdoc.get("name"),
+                                                  "content": subdoc.get("msg")})
+        st.session_state.gc_chat_messages.reverse()
+        for message in st.session_state.gc_chat_messages:
+            st.write(message)
+        #     col1, col2 = st.columns(2)
+        #     get_img1 = ""
+        #     get_img2 = ""
+        #     for user in st.session_state.users:
+        #         if user["name"] == word:
+        #             get_img1 = user["profile_img"]
+        #         elif user["name"] == this_user:
+        #             get_img2 = user["profile_img"]
+        #
+        #
+        #     if (message["fromId"] == this_user and message["toId"] == word) or (message["fromId"] == word and message["toId"] == this_user):
+        #         if message["fromId"] != this_user:
+        #             with col1:
+        #                 with st.chat_message(message["role"], avatar="📄"):
+        #                     col3, col4, col5, col6, col7 = st.columns(5)
+        #                     with col3:
+        #                         st.image(get_image(get_img1), width=40)
+        #                     with col4:
+        #                         st.subheader(message["fromId"])
+        #                     with col5:
+        #                         st.write("")
+        #                     with col6:
+        #                         st.write("")
+        #                     with col7:
+        #                         st.write("")
+        #                     st.write(message["content"])
+        #         else:
+        #             with col2:
+        #                 with st.chat_message(message["role"], avatar="📄"):
+        #                     col3, col4, col5, col6, col7 = st.columns(5)
+        #                     with col3:
+        #                         st.image(get_image(get_img2), width=40)
+        #                     with col4:
+        #                         st.subheader(message["fromId"])
+        #                     with col5:
+        #                         st.write("")
+        #                     with col6:
+        #                         st.write("")
+        #                     with col7:
+        #                         st.write("")
+        #                     st.write(message["content"])
 
     def route_to_chatlist_view():
         st.session_state.to_chat = ""
