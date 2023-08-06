@@ -20,7 +20,7 @@ from django.core.validators import validate_email
 
 if st.session_state.log == 0:
     # Create an empty container
-    st.write("For demonstration purposes use login \"ucacopperview\" and password \"testing321\" to log into "
+    st.write("For demonstration purposes use login \"testuser\" and password \"testing321\" to log into "
              "the \"TestUser\" account.")
     placeholder = st.empty()
 
